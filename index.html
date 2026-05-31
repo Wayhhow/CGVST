@@ -434,6 +434,7 @@ img {
   letter-spacing: 0.05em;
   margin-bottom: 1.5rem;
   overflow: hidden;
+  position: relative;
 }
 
 .hero-title .char {
@@ -450,6 +451,58 @@ img {
 .hero-title {
   color: var(--orange-primary);
   text-shadow: 0 0 80px rgba(255, 107, 53, 0.3);
+}
+
+/* Glitch Effect for Hero Title */
+.hero-title.glitch-active {
+  animation: glitch-skew 0.3s ease-in-out;
+}
+
+.glitch-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.glitch-layer.red {
+  color: #ff0040;
+  mix-blend-mode: screen;
+  animation: glitch-red 0.15s ease-out;
+}
+
+.glitch-layer.cyan {
+  color: #00f0ff;
+  mix-blend-mode: screen;
+  animation: glitch-cyan 0.15s ease-out;
+}
+
+@keyframes glitch-skew {
+  0% { transform: skewX(0deg); }
+  20% { transform: skewX(-2deg); }
+  40% { transform: skewX(2deg); }
+  60% { transform: skewX(-1deg); }
+  80% { transform: skewX(1deg); }
+  100% { transform: skewX(0deg); }
+}
+
+@keyframes glitch-red {
+  0% { opacity: 0; transform: translateX(0); }
+  20% { opacity: 0.8; transform: translateX(-3px); }
+  40% { opacity: 0; transform: translateX(0); }
+  60% { opacity: 0.6; transform: translateX(-2px); }
+  100% { opacity: 0; transform: translateX(0); }
+}
+
+@keyframes glitch-cyan {
+  0% { opacity: 0; transform: translateX(0); }
+  20% { opacity: 0.8; transform: translateX(3px); }
+  40% { opacity: 0; transform: translateX(0); }
+  60% { opacity: 0.6; transform: translateX(2px); }
+  100% { opacity: 0; transform: translateX(0); }
 }
 
 .hero-subtitle {
@@ -1026,8 +1079,8 @@ img {
 
 .gallery-item {
   flex-shrink: 0;
-  width: 350px;
-  height: 450px;
+  width: 500px;
+  height: 350px;
   border-radius: 2px;
   overflow: hidden;
   position: relative;
@@ -1444,12 +1497,39 @@ img {
   left: -80px;
 }
 
+.deco-circle-3 {
+  width: 200px;
+  height: 200px;
+  top: 40%;
+  left: 10%;
+  border-color: rgba(255, 107, 53, 0.05);
+}
+
 .deco-line {
   position: absolute;
   width: 1px;
   height: 120px;
   background: linear-gradient(to bottom, transparent, rgba(255, 107, 53, 0.15), transparent);
   pointer-events: none;
+}
+
+/* Floating particles decoration */
+.floating-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--orange-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.3;
+  animation: float-particle 8s ease-in-out infinite;
+}
+
+@keyframes float-particle {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.2; }
+  25% { transform: translateY(-20px) translateX(10px); opacity: 0.4; }
+  50% { transform: translateY(-10px) translateX(-5px); opacity: 0.3; }
+  75% { transform: translateY(-30px) translateX(5px); opacity: 0.5; }
 }
 
 /* ============================================
@@ -1735,6 +1815,9 @@ img {
   <div class="preloader-sub">SUSTech Zhicheng College</div>
 </div>
 
+<!-- Global Background Constellation Canvas -->
+<canvas id="constellationCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
 <!-- Navigation -->
 <nav class="nav" id="nav">
   <div class="nav-logo">
@@ -1766,15 +1849,15 @@ img {
 <section class="hero" id="hero">
   <canvas class="hero-canvas" id="heroCanvas"></canvas>
   
-  <!-- 第一幕：尘埃 -->
+  <!-- 第一幕：橙色光点 -->
   <div class="hero-story" id="storyDust">
-    <p class="story-line">起初，只是几粒漂浮在黑暗中的尘埃</p>
-    <p class="story-hint">移动鼠标，点燃它们</p>
+    <p class="story-line">起初，只是几粒漂浮在黑暗中的<span style="color:var(--orange-primary)">橙色光点</span></p>
+    <p class="story-hint">↓ 向下滚动，让它们汇聚</p>
   </div>
-  
-  <!-- 第二幕：燃烧（滚动后显示） -->
+
+  <!-- 第二幕：汇聚成光（滚动后显示） -->
   <div class="hero-story hidden" id="storyFire">
-    <p class="story-line">后来它们学会了燃烧</p>
+    <p class="story-line">后来它们<span style="color:var(--orange-primary)">汇聚成光</span></p>
   </div>
   
   <!-- 第三幕：橙光队（滚动后显示） -->
@@ -1824,6 +1907,10 @@ img {
 
 <!-- Timeline Section -->
 <section class="section timeline-section" id="timeline">
+  <div class="deco-circle deco-circle-3" data-speed="0.04"></div>
+  <div class="floating-particle" style="top:20%;right:15%;animation-delay:0s;" data-speed="0.06"></div>
+  <div class="floating-particle" style="top:60%;left:8%;animation-delay:2s;" data-speed="0.05"></div>
+  <div class="floating-particle" style="top:80%;right:20%;animation-delay:4s;" data-speed="0.07"></div>
   <div class="section-number"><span class="num">02</span><span class="num-line"></span></div>
   <div class="section-label">Timeline</div>
   <h2 class="section-title" id="timelineTitle">
@@ -2031,6 +2118,16 @@ img {
 
     <div class="timeline-item">
       <div class="tl-content">
+        <div class="tl-date">2025.09</div>
+        <div class="tl-title">第三届橙光队成立</div>
+        <div class="tl-desc">2025年9月开学，第三代橙光队正式组建，队伍从12人发展至<span class="highlight-num">18</span>人，注入新鲜血液，开启全新篇章。</div>
+        <span class="tl-tag">成长</span>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
         <div class="tl-date">2026.03</div>
         <div class="tl-title">学雷锋日 & 换届大会</div>
         <div class="tl-desc">开展学雷锋主题志愿服务活动；举行换届暨年度总结大会，传承橙光精神。</div>
@@ -2138,7 +2235,7 @@ img {
     <div class="gallery-item">
       <img src="assets/images/荣誉_社会实践优秀团队二等奖.jpg" alt="社会实践优秀团队二等奖" loading="lazy">
       <div class="gallery-item-overlay">
-        <div class="gallery-item-title">寒假社会实践优秀团队一等奖</div>
+        <div class="gallery-item-title">寒假社会实践优秀团队二等奖</div>
         <div class="gallery-item-sub">南方科技大学</div>
       </div>
     </div>
@@ -2454,36 +2551,68 @@ img {
   gsap.ticker.lagSmoothing(0);
 
   // ============================================
-  // CUSTOM CURSOR
+  // CUSTOM CURSOR with MAGNETIC EFFECT
   // ============================================
   const cursorDot = document.querySelector('.cursor-dot');
   const cursorRing = document.querySelector('.cursor-ring');
   let mouseX = 0, mouseY = 0;
   let ringX = 0, ringY = 0;
+  let cursorOffsetX = 0, cursorOffsetY = 0;
 
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
+    // Apply magnetic offset to cursor
+    gsap.to(cursorDot, { 
+      x: mouseX + cursorOffsetX, 
+      y: mouseY + cursorOffsetY, 
+      duration: 0.1 
+    });
   });
 
   function animateCursorRing() {
-    ringX += (mouseX - ringX) * 0.15;
-    ringY += (mouseY - ringY) * 0.15;
+    ringX += (mouseX + cursorOffsetX - ringX) * 0.15;
+    ringY += (mouseY + cursorOffsetY - ringY) * 0.15;
     cursorRing.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
     requestAnimationFrame(animateCursorRing);
   }
   animateCursorRing();
 
-  // Hover effects
-  document.querySelectorAll('[data-hover], a, button').forEach(el => {
+  // Magnetic effect for interactive elements
+  const magneticElements = document.querySelectorAll('[data-hover], a, button, .nav-links a, .bilibili-card, .activity-card, .achievement-card, .gallery-item, .tl-link');
+  
+  magneticElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursorDot.classList.add('hover');
       cursorRing.classList.add('hover');
     });
+    
     el.addEventListener('mouseleave', () => {
       cursorDot.classList.remove('hover');
       cursorRing.classList.remove('hover');
+      // Reset magnetic offset with elastic effect
+      gsap.to({x: cursorOffsetX, y: cursorOffsetY}, {
+        x: 0,
+        y: 0,
+        duration: 0.6,
+        ease: 'elastic.out(1, 0.3)',
+        onUpdate: function() {
+          cursorOffsetX = this.targets()[0].x;
+          cursorOffsetY = this.targets()[0].y;
+        }
+      });
+    });
+    
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const distX = e.clientX - centerX;
+      const distY = e.clientY - centerY;
+      
+      // Magnetic pull strength (0.3 = 30% of distance)
+      cursorOffsetX = distX * 0.3;
+      cursorOffsetY = distY * 0.3;
     });
   });
 
@@ -2604,23 +2733,30 @@ img {
     }
   });
   
-  // 基础粒子类
+  // 基础粒子类 - 3D透视版本 + 拖尾效果
   class Particle {
     constructor(x, y, isFire = false) {
       this.x = x || Math.random() * canvasWidth;
       this.y = y || Math.random() * canvasHeight;
+      this.z = Math.random() * 500; // 3D深度 (0-500)
       this.size = Math.random() * 2 + 0.5;
       this.speedX = (Math.random() - 0.5) * 0.3;
       this.speedY = (Math.random() - 0.5) * 0.3;
+      this.speedZ = (Math.random() - 0.5) * 0.5; // Z轴速度
       this.life = 1;
       this.decay = Math.random() * 0.002 + 0.001;
       this.isFire = isFire;
+      
+      // 拖尾历史位置数组
+      this.trail = [];
+      this.maxTrailLength = isFire ? 15 : 8;
       
       if (isFire) {
         // 火种粒子 - 橙色发光
         this.size = Math.random() * 4 + 2;
         this.speedX = (Math.random() - 0.5) * 2;
         this.speedY = (Math.random() - 0.5) * 2 - 1; // 向上飘
+        this.speedZ = (Math.random() - 0.5) * 3; // Z轴更快
         this.decay = Math.random() * 0.02 + 0.01;
         this.hue = Math.random() * 30 + 15; // 橙红色调
       } else {
@@ -2631,16 +2767,53 @@ img {
       }
     }
     
-    update() {
+    update(scrollProgress = 0, mouseX = null, mouseY = null) {
+      // 保存当前位置到拖尾历史
+      this.trail.push({ x: this.x, y: this.y, z: this.z, life: this.life });
+      if (this.trail.length > this.maxTrailLength) {
+        this.trail.shift();
+      }
+      
+      // 第一幕：鼠标交互 - 粒子被鼠标吸引
+      if (scrollProgress < 0.33 && mouseX !== null && mouseY !== null) {
+        const dx = mouseX - this.x;
+        const dy = mouseY - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const attractRadius = 250;
+        
+        if (dist < attractRadius && dist > 5) {
+          const force = (attractRadius - dist) / attractRadius;
+          this.speedX += (dx / dist) * force * 0.08;
+          this.speedY += (dy / dist) * force * 0.08;
+        }
+        
+        // 速度衰减
+        this.speedX *= 0.98;
+        this.speedY *= 0.98;
+      }
+      
       this.x += this.speedX;
       this.y += this.speedY;
+      this.z += this.speedZ;
       this.life -= this.decay;
+      
+      // 根据滚动进度调整Z轴 - 汇聚效果
+      if (scrollProgress > 0.5) {
+        const convergeStrength = (scrollProgress - 0.5) * 2; // 0-1
+        this.z -= convergeStrength * 2; // 向屏幕前方汇聚
+        this.x += (canvasWidth / 2 - this.x) * convergeStrength * 0.01;
+        this.y += (canvasHeight / 2 - this.y) * convergeStrength * 0.01;
+      }
       
       if (this.isFire) {
         // 火种粒子向上飘并逐渐变小
         this.speedY -= 0.05;
         this.size *= 0.98;
       }
+      
+      // Z轴边界
+      if (this.z < 0) this.z = 500;
+      if (this.z > 500) this.z = 0;
       
       // 边界环绕
       if (this.x < 0) this.x = canvasWidth;
@@ -2649,25 +2822,120 @@ img {
       if (this.y > canvasHeight) this.y = 0;
     }
     
-    draw() {
+    getProjected() {
+      const focalLength = 300;
+      const centerX = canvasWidth / 2;
+      const centerY = canvasHeight / 2;
+      const scale = focalLength / (focalLength + this.z);
+      
+      return {
+        x: (this.x - centerX) * scale + centerX,
+        y: (this.y - centerY) * scale + centerY,
+        scale: scale,
+        alpha: scale * this.life // 越远越透明
+      };
+    }
+    
+    getProjectedPoint(point) {
+      const focalLength = 300;
+      const centerX = canvasWidth / 2;
+      const centerY = canvasHeight / 2;
+      const scale = focalLength / (focalLength + point.z);
+      
+      return {
+        x: (point.x - centerX) * scale + centerX,
+        y: (point.y - centerY) * scale + centerY,
+        scale: scale,
+        alpha: scale * point.life
+      };
+    }
+    
+    drawTrail() {
+      if (this.trail.length < 2) return;
+      
+      const projCurrent = this.getProjected();
+      
       ctx.save();
-      ctx.globalAlpha = this.life * (this.isFire ? 0.8 : 0.3);
+      ctx.globalCompositeOperation = 'lighter';
       
       if (this.isFire) {
-        // 火种发光效果
-        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 3);
+        // 火种粒子拖尾 - 橙色发光轨迹
+        for (let i = 0; i < this.trail.length - 1; i++) {
+          const point = this.trail[i];
+          const nextPoint = this.trail[i + 1];
+          const proj = this.getProjectedPoint(point);
+          const projNext = this.getProjectedPoint(nextPoint);
+          
+          const progress = i / this.trail.length;
+          const alpha = progress * proj.alpha * 0.6;
+          const lineWidth = (1 - progress) * this.size * proj.scale * 2;
+          
+          if (alpha < 0.01 || lineWidth < 0.1) continue;
+          
+          ctx.beginPath();
+          ctx.moveTo(proj.x, proj.y);
+          ctx.lineTo(projNext.x, projNext.y);
+          ctx.strokeStyle = `hsla(${this.hue}, 100%, ${50 + progress * 20}%, ${alpha})`;
+          ctx.lineWidth = lineWidth;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
+      } else {
+        // 尘埃粒子拖尾 - 微弱轨迹
+        for (let i = 0; i < this.trail.length - 1; i++) {
+          const point = this.trail[i];
+          const nextPoint = this.trail[i + 1];
+          const proj = this.getProjectedPoint(point);
+          const projNext = this.getProjectedPoint(nextPoint);
+          
+          const progress = i / this.trail.length;
+          const alpha = progress * proj.alpha * 0.15;
+          const lineWidth = (1 - progress) * this.size * proj.scale * 0.5;
+          
+          if (alpha < 0.01 || lineWidth < 0.1) continue;
+          
+          ctx.beginPath();
+          ctx.moveTo(proj.x, proj.y);
+          ctx.lineTo(projNext.x, projNext.y);
+          ctx.strokeStyle = `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, ${alpha})`;
+          ctx.lineWidth = lineWidth;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
+      }
+      
+      ctx.restore();
+    }
+    
+    draw() {
+      // 先绘制拖尾
+      this.drawTrail();
+      
+      const proj = this.getProjected();
+      const drawSize = this.size * proj.scale;
+      
+      // 跳过太小的粒子
+      if (drawSize < 0.3) return;
+      
+      ctx.save();
+      ctx.globalAlpha = proj.alpha * (this.isFire ? 0.8 : 0.3);
+      
+      if (this.isFire) {
+        // 火种发光效果 - 3D透视
+        const glowSize = drawSize * 3;
+        const gradient = ctx.createRadialGradient(proj.x, proj.y, 0, proj.x, proj.y, glowSize);
         gradient.addColorStop(0, `hsla(${this.hue}, 100%, 60%, 1)`);
         gradient.addColorStop(0.4, `hsla(${this.hue}, 100%, 50%, 0.5)`);
         gradient.addColorStop(1, `hsla(${this.hue}, 100%, 40%, 0)`);
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+        ctx.arc(proj.x, proj.y, glowSize, 0, Math.PI * 2);
         ctx.fill();
       } else {
-        // 尘埃粒子
-        ctx.fillStyle = `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, ${this.life * 0.5})`;
+        // 尘埃粒子 - 3D透视
+        ctx.fillStyle = `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, ${proj.alpha * 0.5})`;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.arc(proj.x, proj.y, drawSize, 0, Math.PI * 2);
         ctx.fill();
       }
       
@@ -2691,14 +2959,19 @@ img {
     particles.push(new Particle());
   }
   
-  // 动画循环
+  // 动画循环 - 3D透视版本
+  let heroScrollProgress = 0;
+  
   function animate() {
     ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     
-    // 更新和绘制尘埃粒子
+    // 按Z轴深度排序（远到近）
+    particles.sort((a, b) => b.z - a.z);
+    
+    // 更新和绘制尘埃粒子（带滚动进度和鼠标交互）
     particles.forEach(p => {
-      p.update();
+      p.update(heroScrollProgress, particleMouseX, particleMouseY);
       p.draw();
     });
     
@@ -2723,12 +2996,27 @@ img {
   const storyFire = document.getElementById('storyFire');
   const heroReveal = document.getElementById('heroReveal');
   const heroSection = document.getElementById('hero');
+  const heroScrollHint = document.querySelector('.hero-scroll-hint');
   
   // 使用 Lenis 滚动监听
   lenis.on('scroll', ({ scroll }) => {
     // 计算 Hero section 内的滚动进度 (0 - 1)
     const heroHeight = heroSection.offsetHeight;
     const heroProgress = Math.min(Math.max(scroll / heroHeight, 0), 1);
+    
+    // 更新全局滚动进度供粒子系统使用
+    heroScrollProgress = heroProgress;
+    
+    // 滚过 Hero section 后，使用平滑过渡隐藏
+    if (heroProgress >= 0.95) {
+      const fadeOutProgress = (heroProgress - 0.95) / 0.05;
+      heroSection.style.opacity = 1 - fadeOutProgress;
+      heroSection.style.pointerEvents = 'none';
+      if (heroProgress >= 1) return;
+    } else {
+      heroSection.style.opacity = '1';
+      heroSection.style.pointerEvents = '';
+    }
     
     // 第一幕 -> 第二幕 (0% - 33%)
     if (heroProgress < 0.33) {
@@ -2760,6 +3048,52 @@ img {
   });
 
   // ============================================
+  // GLITCH EFFECT for Hero Title
+  // ============================================
+  function triggerGlitch(element) {
+    if (!element) return;
+    
+    // Add glitch skew animation
+    element.classList.add('glitch-active');
+    
+    // Create RGB split layers
+    const redLayer = document.createElement('div');
+    redLayer.className = 'glitch-layer red';
+    redLayer.textContent = element.textContent;
+    
+    const cyanLayer = document.createElement('div');
+    cyanLayer.className = 'glitch-layer cyan';
+    cyanLayer.textContent = element.textContent;
+    
+    element.appendChild(redLayer);
+    element.appendChild(cyanLayer);
+    
+    // Clean up after animation
+    setTimeout(() => {
+      element.classList.remove('glitch-active');
+      if (redLayer.parentNode) redLayer.remove();
+      if (cyanLayer.parentNode) cyanLayer.remove();
+    }, 300);
+  }
+  
+  // Random glitch trigger
+  function startRandomGlitch() {
+    const heroTitle = document.getElementById('heroTitle');
+    if (!heroTitle) return;
+    
+    // Random interval between 3-8 seconds
+    const nextGlitch = Math.random() * 5000 + 3000;
+    
+    setTimeout(() => {
+      // Only glitch if hero is visible
+      if (!heroReveal.classList.contains('hidden')) {
+        triggerGlitch(heroTitle);
+      }
+      startRandomGlitch();
+    }, nextGlitch);
+  }
+
+  // ============================================
   // HERO ANIMATIONS
   // ============================================
   function initHeroAnimations() {
@@ -2787,7 +3121,6 @@ img {
       if (tag) return tag;
       return `<span class="char">${char}</span>`;
     });
-
     const chars = heroTitle.querySelectorAll('.char');
     gsap.to(chars, {
       opacity: 1,
@@ -2814,6 +3147,9 @@ img {
       delay: 2,
       ease: 'power2.out'
     });
+    
+    // Start random glitch effect after initial animation
+    setTimeout(startRandomGlitch, 3000);
   }
 
   // ============================================
@@ -3001,11 +3337,14 @@ img {
       }
     });
 
-    // --- Parallax decorations ---
+    // --- Parallax decorations with 3D depth ---
     gsap.utils.toArray('[data-speed]').forEach(el => {
       const speed = parseFloat(el.dataset.speed);
+      const isParticle = el.classList.contains('floating-particle');
+      
       gsap.to(el, {
         y: () => speed * 1000,
+        x: () => isParticle ? Math.sin(speed * 100) * 30 : 0,
         ease: 'none',
         scrollTrigger: {
           trigger: el.closest('.section') || el,
@@ -3014,6 +3353,16 @@ img {
           scrub: true
         }
       });
+      
+      // Add subtle rotation for floating particles
+      if (isParticle) {
+        gsap.to(el, {
+          rotation: 360,
+          duration: 20 + Math.random() * 10,
+          repeat: -1,
+          ease: 'none'
+        });
+      }
     });
 
     // --- Culture text paragraphs reveal ---
@@ -3177,6 +3526,289 @@ img {
       }
     });
   }
+
+  // ============================================
+  // GLOBAL CONSTELLATION PARTICLE NETWORK
+  // ============================================
+  (function initConstellation() {
+    const canvas = document.getElementById('constellationCanvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    
+    // Particle class for constellation
+    class ConstellationParticle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.size = Math.random() * 2 + 1;
+        this.baseAlpha = Math.random() * 0.5 + 0.3;
+        this.alpha = this.baseAlpha;
+        this.hue = Math.random() * 30 + 15; // Orange range
+        this.angle = Math.random() * Math.PI * 2;
+        this.orbitRadius = Math.random() * 100 + 50;
+        this.orbitSpeed = (Math.random() - 0.5) * 0.002;
+        this.centerX = this.x;
+        this.centerY = this.y;
+      }
+      
+      update(mouseX, mouseY, time) {
+        // Orbital motion around center
+        this.angle += this.orbitSpeed;
+        this.centerX += this.vx;
+        this.centerY += this.vy;
+        
+        // Wrap around edges
+        if (this.centerX < -this.orbitRadius) this.centerX = width + this.orbitRadius;
+        if (this.centerX > width + this.orbitRadius) this.centerX = -this.orbitRadius;
+        if (this.centerY < -this.orbitRadius) this.centerY = height + this.orbitRadius;
+        if (this.centerY > height + this.orbitRadius) this.centerY = -this.orbitRadius;
+        
+        // Calculate position with orbital offset
+        this.x = this.centerX + Math.cos(this.angle) * this.orbitRadius * 0.3;
+        this.y = this.centerY + Math.sin(this.angle) * this.orbitRadius * 0.3;
+        
+        // Mouse attraction
+        if (mouseX !== null && mouseY !== null) {
+          const dx = mouseX - this.x;
+          const dy = mouseY - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < 200) {
+            const force = (200 - dist) / 200;
+            this.x += dx * force * 0.02;
+            this.y += dy * force * 0.02;
+            this.alpha = Math.min(this.baseAlpha + force * 0.5, 1);
+          } else {
+            this.alpha += (this.baseAlpha - this.alpha) * 0.05;
+          }
+        }
+      }
+      
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        
+        // Glow effect
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 4);
+        gradient.addColorStop(0, `hsla(${this.hue}, 100%, 60%, ${this.alpha})`);
+        gradient.addColorStop(0.5, `hsla(${this.hue}, 100%, 50%, ${this.alpha * 0.3})`);
+        gradient.addColorStop(1, `hsla(${this.hue}, 100%, 40%, 0)`);
+        
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Core
+        ctx.fillStyle = `hsla(${this.hue}, 100%, 80%, ${this.alpha})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.restore();
+      }
+    }
+    
+    // Create particles
+    const particleCount = Math.min(80, Math.floor((width * height) / 15000));
+    const particles = [];
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new ConstellationParticle());
+    }
+    
+    // Mouse tracking
+    let mouseX = null, mouseY = null;
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    document.addEventListener('mouseleave', () => {
+      mouseX = null;
+      mouseY = null;
+    });
+    
+    // Animation loop
+    let time = 0;
+    function animate() {
+      time += 0.016;
+      
+      ctx.clearRect(0, 0, width, height);
+      
+      // Update and draw particles
+      particles.forEach(p => {
+        p.update(mouseX, mouseY, time);
+      });
+      
+      // Draw connections
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < 150) {
+            const alpha = (1 - dist / 150) * 0.3;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `hsla(25, 100%, 60%, ${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      
+      ctx.restore();
+      
+      // Draw particles on top
+      particles.forEach(p => p.draw());
+      
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+
+  // ============================================
+  // MOUSE ORANGE GLOW TRAIL
+  // ============================================
+  (function initMouseTrail() {
+    // Skip on touch devices
+    if ('ontouchstart' in window) return;
+    
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.zIndex = '9998';
+    canvas.style.pointerEvents = 'none';
+    document.body.appendChild(canvas);
+    
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    
+    // Trail particle class
+    class TrailParticle {
+      constructor(x, y, vx, vy) {
+        this.x = x;
+        this.y = y;
+        this.vx = vx * 0.3;
+        this.vy = vy * 0.3;
+        this.life = 1;
+        this.decay = Math.random() * 0.02 + 0.015;
+        this.size = Math.random() * 4 + 2;
+        this.hue = Math.random() * 40 + 15; // Orange range 15-55
+        this.glowSize = this.size * 3;
+      }
+      
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vx *= 0.95;
+        this.vy *= 0.95;
+        this.life -= this.decay;
+        this.size *= 0.97;
+        this.glowSize = this.size * 3;
+      }
+      
+      draw() {
+        if (this.life <= 0) return;
+        
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalAlpha = this.life * 0.6;
+        
+        // Glow
+        const gradient = ctx.createRadialGradient(
+          this.x, this.y, 0,
+          this.x, this.y, this.glowSize
+        );
+        gradient.addColorStop(0, `hsla(${this.hue}, 100%, 70%, ${this.life})`);
+        gradient.addColorStop(0.5, `hsla(${this.hue}, 100%, 50%, ${this.life * 0.5})`);
+        gradient.addColorStop(1, `hsla(${this.hue}, 100%, 40%, 0)`);
+        
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.glowSize, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Core
+        ctx.fillStyle = `hsla(${this.hue}, 100%, 90%, ${this.life})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 0.5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.restore();
+      }
+    }
+    
+    const particles = [];
+    let lastMouseX = 0, lastMouseY = 0;
+    let mouseSpeed = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+      const dx = e.clientX - lastMouseX;
+      const dy = e.clientY - lastMouseY;
+      mouseSpeed = Math.sqrt(dx * dx + dy * dy);
+      
+      // Create trail particles based on speed
+      const count = Math.min(Math.floor(mouseSpeed / 3), 5);
+      for (let i = 0; i < count; i++) {
+        const t = i / count;
+        const px = lastMouseX + dx * t + (Math.random() - 0.5) * 4;
+        const py = lastMouseY + dy * t + (Math.random() - 0.5) * 4;
+        particles.push(new TrailParticle(px, py, dx * 0.1, dy * 0.1));
+      }
+      
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+    });
+    
+    // Animation loop
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      
+      // Update and draw particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.update();
+        p.draw();
+        
+        if (p.life <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+      
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
 
 })();
 </script>
