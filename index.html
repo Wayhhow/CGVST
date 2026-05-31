@@ -307,7 +307,12 @@ img {
   .nav { padding: 1rem 1.5rem; }
   .nav.scrolled { padding: 0.75rem 1.5rem; }
   .nav-links { display: none; }
-  .nav-menu-btn { display: flex; }
+  .nav-menu-btn { display: flex; min-width: 44px; min-height: 44px; justify-content: center; align-items: center; }
+  .hero { height: 100vh; }
+  .hero-story { display: none !important; }
+  .hero-content { opacity: 1 !important; transform: none !important; }
+  .hero-content.hidden { opacity: 1 !important; transform: none !important; pointer-events: auto !important; }
+  .hero-scroll-hint { display: none; }
 }
 
 /* ============================================
@@ -698,6 +703,8 @@ img {
     gap: 0.75rem;
   }
   .stat-card { padding: 1.5rem 1rem; }
+  .mobile-menu a { font-size: 1.25rem; }
+  .mobile-menu { gap: 1.5rem; }
 }
 
 /* ============================================
@@ -901,6 +908,8 @@ img {
     width: 100%;
     margin: 0;
   }
+  .timeline-item .tl-content { padding: 1.5rem; }
+  .achievement-card { padding: 1.5rem; }
 }
 
 /* ============================================
@@ -1231,9 +1240,14 @@ img {
 }
 
 @media (max-width: 768px) {
-  .gallery-item {
-    width: 280px;
-    height: 360px;
+  .gallery-section { overflow: visible; }
+  .gallery-track { flex-direction: column; gap: 1.5rem; will-change: auto; padding: 1rem 0; }
+  .gallery-item { width: 100%; height: 240px; }
+  .gallery-item-overlay { padding: 1.25rem; }
+
+  .activity-card .activity-overlay {
+    transform: translateY(0);
+    padding: 1rem;
   }
 }
 
@@ -1792,6 +1806,21 @@ img {
   .data-viz-stats {
     gap: 2rem;
   }
+  .section { padding: 4rem 1.25rem !important; }
+  .section-title { font-size: clamp(1.5rem, 6vw, 2.5rem); }
+  .section-label::before { width: 24px; }
+  .about-intro { font-size: clamp(1rem, 3.5vw, 1.15rem); margin-bottom: 2.5rem; }
+  .nav-logo img { height: 48px; }
+  .footer-logo-row img:first-child { height: 80px; margin-left: -10px; }
+  .footer-logo-row img:last-child { height: 28px; }
+}
+
+@media (max-width: 480px) {
+  .about-grid { gap: 0.75rem; }
+  .stat-card { padding: 1.5rem 0.75rem; }
+  .section { padding: 3rem 1rem !important; }
+  .section-title { font-size: clamp(1.35rem, 7vw, 2rem); }
+  .hero-title { font-size: clamp(2.5rem, 14vw, 4rem); }
 }
 </style>
 </head>
@@ -2427,6 +2456,7 @@ img {
 <script>
 (function() {
   'use strict';
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   // ============================================
   // PRELOADER
@@ -3018,32 +3048,40 @@ img {
       heroSection.style.pointerEvents = '';
     }
     
-    // 第一幕 -> 第二幕 (0% - 33%)
-    if (heroProgress < 0.33) {
-      const phase1Progress = heroProgress / 0.33;
-      storyDust.style.opacity = 1 - phase1Progress;
-      storyDust.style.transform = `translateY(${-phase1Progress * 50}px)`;
-      storyFire.classList.add('hidden');
-      heroReveal.classList.add('hidden');
-    }
-    // 第二幕 (33% - 66%)
-    else if (heroProgress < 0.66) {
-      storyDust.classList.add('hidden');
-      storyFire.classList.remove('hidden');
-      heroReveal.classList.add('hidden');
-      
-      const phase2Progress = (heroProgress - 0.33) / 0.33;
-      storyFire.style.opacity = 1 - phase2Progress * 0.5;
-    }
-    // 第三幕 (66% - 100%)
-    else {
+    if (isTouchDevice) {
       storyDust.classList.add('hidden');
       storyFire.classList.add('hidden');
       heroReveal.classList.remove('hidden');
-      
-      const phase3Progress = (heroProgress - 0.66) / 0.34;
-      heroReveal.style.opacity = Math.min(phase3Progress * 2, 1);
-      heroReveal.style.transform = `scale(${0.9 + phase3Progress * 0.1})`;
+      heroReveal.style.opacity = '1';
+      heroReveal.style.transform = 'scale(1)';
+    } else {
+      // 第一幕 -> 第二幕 (0% - 33%)
+      if (heroProgress < 0.33) {
+        const phase1Progress = heroProgress / 0.33;
+        storyDust.style.opacity = 1 - phase1Progress;
+        storyDust.style.transform = `translateY(${-phase1Progress * 50}px)`;
+        storyFire.classList.add('hidden');
+        heroReveal.classList.add('hidden');
+      }
+      // 第二幕 (33% - 66%)
+      else if (heroProgress < 0.66) {
+        storyDust.classList.add('hidden');
+        storyFire.classList.remove('hidden');
+        heroReveal.classList.add('hidden');
+        
+        const phase2Progress = (heroProgress - 0.33) / 0.33;
+        storyFire.style.opacity = 1 - phase2Progress * 0.5;
+      }
+      // 第三幕 (66% - 100%)
+      else {
+        storyDust.classList.add('hidden');
+        storyFire.classList.add('hidden');
+        heroReveal.classList.remove('hidden');
+        
+        const phase3Progress = (heroProgress - 0.66) / 0.34;
+        heroReveal.style.opacity = Math.min(phase3Progress * 2, 1);
+        heroReveal.style.transform = `scale(${0.9 + phase3Progress * 0.1})`;
+      }
     }
   });
 
@@ -3097,21 +3135,31 @@ img {
   // HERO ANIMATIONS
   // ============================================
   function initHeroAnimations() {
-    // 第一幕淡入
-    gsap.to('#storyDust .story-line', {
-      opacity: 0.9,
-      y: 0,
-      duration: 1.5,
-      delay: 0.5,
-      ease: 'power3.out'
-    });
-    
-    gsap.to('#storyDust .story-hint', {
-      opacity: 0.5,
-      duration: 1,
-      delay: 1.5,
-      ease: 'power2.out'
-    });
+    if (!isTouchDevice) {
+      // 第一幕淡入
+      gsap.to('#storyDust .story-line', {
+        opacity: 0.9,
+        y: 0,
+        duration: 1.5,
+        delay: 0.5,
+        ease: 'power3.out'
+      });
+      
+      gsap.to('#storyDust .story-hint', {
+        opacity: 0.5,
+        duration: 1,
+        delay: 1.5,
+        ease: 'power2.out'
+      });
+
+      // Scroll hint
+      gsap.to('.hero-scroll-hint', {
+        opacity: 1,
+        duration: 1,
+        delay: 2,
+        ease: 'power2.out'
+      });
+    }
 
     // Title chars
     const heroTitle = document.getElementById('heroTitle');
@@ -3138,14 +3186,6 @@ img {
       duration: 1,
       delay: 1.5,
       ease: 'power3.out'
-    });
-
-    // Scroll hint
-    gsap.to('.hero-scroll-hint', {
-      opacity: 1,
-      duration: 1,
-      delay: 2,
-      ease: 'power2.out'
     });
     
     // Start random glitch effect after initial animation
@@ -3259,23 +3299,25 @@ img {
     // --- Gallery Section ---
     splitAndAnimate('#galleryTitle', '.reveal-word');
 
-    // Horizontal gallery scroll
-    const galleryTrack = document.getElementById('galleryTrack');
-    if (galleryTrack) {
-      const totalWidth = galleryTrack.scrollWidth - window.innerWidth;
-      gsap.to(galleryTrack, {
-        x: -totalWidth,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#gallery',
-          start: 'top top',
-          end: () => `+=${totalWidth}`,
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true
-        }
-      });
+    // Horizontal gallery scroll (desktop only)
+    if (!isTouchDevice) {
+      const galleryTrack = document.getElementById('galleryTrack');
+      if (galleryTrack) {
+        const totalWidth = galleryTrack.scrollWidth - window.innerWidth;
+        gsap.to(galleryTrack, {
+          x: -totalWidth,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '#gallery',
+            start: 'top top',
+            end: () => `+=${totalWidth}`,
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true
+          }
+        });
+      }
     }
 
     // --- Culture Section ---
@@ -3460,25 +3502,27 @@ img {
     achievementCounters.forEach(c => achCounterObserver.observe(c));
 
     // --- 3D Tilt Effect for Achievement Cards ---
-    document.querySelectorAll('[data-tilt]').forEach(card => {
-      const inner = card.querySelector('.achievement-inner');
-      if (!inner) return;
+    if (!isTouchDevice) {
+      document.querySelectorAll('[data-tilt]').forEach(card => {
+        const inner = card.querySelector('.achievement-inner');
+        if (!inner) return;
 
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = ((y - centerY) / centerY) * -5;
-        const rotateY = ((x - centerX) / centerX) * 5;
-        inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      });
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -5;
+          const rotateY = ((x - centerX) / centerX) * 5;
+          inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
 
-      card.addEventListener('mouseleave', () => {
-        inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        card.addEventListener('mouseleave', () => {
+          inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
       });
-    });
+    }
   }
 
   // ============================================
@@ -3623,7 +3667,7 @@ img {
     }
     
     // Create particles
-    const particleCount = Math.min(80, Math.floor((width * height) / 15000));
+    const particleCount = isTouchDevice ? Math.min(30, Math.floor((width * height) / 25000)) : Math.min(80, Math.floor((width * height) / 15000));
     const particles = [];
     for (let i = 0; i < particleCount; i++) {
       particles.push(new ConstellationParticle());
@@ -3654,27 +3698,31 @@ img {
       
       // Draw connections
       ctx.save();
-      ctx.globalCompositeOperation = 'lighter';
-      
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          
-          if (dist < 150) {
-            const alpha = (1 - dist / 150) * 0.3;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `hsla(25, 100%, 60%, ${alpha})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+      if (isTouchDevice) {
+        ctx.restore();
+      } else {
+        ctx.globalCompositeOperation = 'lighter';
+        
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 150) {
+              const alpha = (1 - dist / 150) * 0.3;
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `hsla(25, 100%, 60%, ${alpha})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
+        
+        ctx.restore();
       }
-      
-      ctx.restore();
       
       // Draw particles on top
       particles.forEach(p => p.draw());
@@ -3688,8 +3736,7 @@ img {
   // MOUSE ORANGE GLOW TRAIL
   // ============================================
   (function initMouseTrail() {
-    // Skip on touch devices
-    if ('ontouchstart' in window) return;
+    if (isTouchDevice) return;
     
     const canvas = document.createElement('canvas');
     canvas.style.position = 'fixed';
