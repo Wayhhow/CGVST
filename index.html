@@ -3053,6 +3053,24 @@ img {
       heroSection.style.pointerEvents = '';
     }
     
+    // 第一幕 -> 第二幕 (0% - 33%)
+    if (heroProgress < 0.33) {
+      const phase1Progress = heroProgress / 0.33;
+      storyDust.style.opacity = 1 - phase1Progress;
+      storyDust.style.transform = `translateY(${-phase1Progress * 50}px)`;
+      storyFire.classList.add('hidden');
+      heroReveal.classList.add('hidden');
+    }
+    // 第二幕 (33% - 66%)
+    else if (heroProgress < 0.66) {
+      storyDust.classList.add('hidden');
+      storyFire.classList.remove('hidden');
+      heroReveal.classList.add('hidden');
+      
+      const phase2Progress = (heroProgress - 0.33) / 0.33;
+      storyFire.style.opacity = 1 - phase2Progress * 0.5;
+    }
+    
     if (isTouchDevice) {
       storyDust.classList.add('hidden');
       storyFire.classList.add('hidden');
@@ -3191,6 +3209,14 @@ img {
       duration: 1,
       delay: 1.5,
       ease: 'power3.out'
+    });
+
+    // Scroll hint
+    gsap.to('.hero-scroll-hint', {
+      opacity: 1,
+      duration: 1,
+      delay: 2,
+      ease: 'power2.out'
     });
     
     // Start random glitch effect after initial animation
@@ -3672,7 +3698,7 @@ img {
     }
     
     // Create particles
-    const particleCount = isTouchDevice ? Math.min(30, Math.floor((width * height) / 25000)) : Math.min(80, Math.floor((width * height) / 15000));
+    const particleCount = Math.min(80, Math.floor((width * height) / 15000));
     const particles = [];
     for (let i = 0; i < particleCount; i++) {
       particles.push(new ConstellationParticle());
@@ -3703,31 +3729,27 @@ img {
       
       // Draw connections
       ctx.save();
-      if (isTouchDevice) {
-        ctx.restore();
-      } else {
-        ctx.globalCompositeOperation = 'lighter';
-        
-        for (let i = 0; i < particles.length; i++) {
-          for (let j = i + 1; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            
-            if (dist < 150) {
-              const alpha = (1 - dist / 150) * 0.3;
-              ctx.beginPath();
-              ctx.moveTo(particles[i].x, particles[i].y);
-              ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.strokeStyle = `hsla(25, 100%, 60%, ${alpha})`;
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
-            }
+      ctx.globalCompositeOperation = 'lighter';
+      
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < 150) {
+            const alpha = (1 - dist / 150) * 0.3;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `hsla(25, 100%, 60%, ${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
           }
         }
-        
-        ctx.restore();
       }
+      
+      ctx.restore();
       
       // Draw particles on top
       particles.forEach(p => p.draw());
@@ -3741,7 +3763,8 @@ img {
   // MOUSE ORANGE GLOW TRAIL
   // ============================================
   (function initMouseTrail() {
-    if (isTouchDevice) return;
+    // Skip on touch devices
+    if ('ontouchstart' in window) return;
     
     const canvas = document.createElement('canvas');
     canvas.style.position = 'fixed';
