@@ -2767,11 +2767,29 @@ img {
       }
     }
     
-    update(scrollProgress = 0) {
+    update(scrollProgress = 0, mouseX = null, mouseY = null) {
       // 保存当前位置到拖尾历史
       this.trail.push({ x: this.x, y: this.y, z: this.z, life: this.life });
       if (this.trail.length > this.maxTrailLength) {
         this.trail.shift();
+      }
+      
+      // 第一幕：鼠标交互 - 粒子被鼠标吸引
+      if (scrollProgress < 0.33 && mouseX !== null && mouseY !== null) {
+        const dx = mouseX - this.x;
+        const dy = mouseY - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const attractRadius = 250;
+        
+        if (dist < attractRadius && dist > 5) {
+          const force = (attractRadius - dist) / attractRadius;
+          this.speedX += (dx / dist) * force * 0.08;
+          this.speedY += (dy / dist) * force * 0.08;
+        }
+        
+        // 速度衰减
+        this.speedX *= 0.98;
+        this.speedY *= 0.98;
       }
       
       this.x += this.speedX;
@@ -2951,9 +2969,9 @@ img {
     // 按Z轴深度排序（远到近）
     particles.sort((a, b) => b.z - a.z);
     
-    // 更新和绘制尘埃粒子（带滚动进度）
+    // 更新和绘制尘埃粒子（带滚动进度和鼠标交互）
     particles.forEach(p => {
-      p.update(heroScrollProgress);
+      p.update(heroScrollProgress, particleMouseX, particleMouseY);
       p.draw();
     });
     
@@ -2989,11 +3007,12 @@ img {
     // 更新全局滚动进度供粒子系统使用
     heroScrollProgress = heroProgress;
     
-    // 滚过 Hero section 后，隐藏所有 fixed 元素，释放页面
-    if (heroProgress >= 1) {
-      heroSection.style.opacity = '0';
+    // 滚过 Hero section 后，使用平滑过渡隐藏
+    if (heroProgress >= 0.95) {
+      const fadeOutProgress = (heroProgress - 0.95) / 0.05;
+      heroSection.style.opacity = 1 - fadeOutProgress;
       heroSection.style.pointerEvents = 'none';
-      return;
+      if (heroProgress >= 1) return;
     } else {
       heroSection.style.opacity = '1';
       heroSection.style.pointerEvents = '';
