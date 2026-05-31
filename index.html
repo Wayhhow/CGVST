@@ -1769,7 +1769,7 @@ img {
   <!-- 第一幕：尘埃 -->
   <div class="hero-story" id="storyDust">
     <p class="story-line">起初，只是几粒漂浮在黑暗中的尘埃</p>
-    <p class="story-hint">移动鼠标，点燃它们</p>
+    <p class="story-hint">↓ 向下滚动，点燃它们</p>
   </div>
   
   <!-- 第二幕：燃烧（滚动后显示） -->
@@ -2723,12 +2723,21 @@ img {
   const storyFire = document.getElementById('storyFire');
   const heroReveal = document.getElementById('heroReveal');
   const heroSection = document.getElementById('hero');
+  const heroScrollHint = document.querySelector('.hero-scroll-hint');
   
   // 使用 Lenis 滚动监听
   lenis.on('scroll', ({ scroll }) => {
     // 计算 Hero section 内的滚动进度 (0 - 1)
     const heroHeight = heroSection.offsetHeight;
     const heroProgress = Math.min(Math.max(scroll / heroHeight, 0), 1);
+    
+    // 滚过 Hero section 后，隐藏所有 fixed 元素，释放页面
+    if (heroProgress >= 1) {
+      heroSection.style.display = 'none';
+      return;
+    } else {
+      heroSection.style.display = '';
+    }
     
     // 第一幕 -> 第二幕 (0% - 33%)
     if (heroProgress < 0.33) {
