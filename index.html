@@ -1,0 +1,3184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>橙光队 | 南方科技大学致诚书院"橙光"志愿服务队</title>
+<meta name="description" content="南方科技大学致诚书院"橙光"志愿服务队 — 橙光耀前路，爱满无障途">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================
+   CSS RESET & BASE
+   ============================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-dark: #0A0A0A;
+  --orange-primary: #FF6B35;
+  --orange-glow: #FF8C5A;
+  --orange-deep: #E55A25;
+  --text-warm: #F5F0EB;
+  --text-muted: #8A8580;
+  --gold-accent: #C9A96E;
+  --gold-light: #D4BC8A;
+  --font-serif: 'Noto Serif SC', 'Songti SC', serif;
+  --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-dark);
+  color: var(--text-warm);
+  overflow-x: hidden;
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--orange-primary);
+  color: var(--bg-dark);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ============================================
+   CUSTOM CURSOR
+   ============================================ */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--orange-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), background 0.3s;
+  mix-blend-mode: difference;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgba(255, 107, 53, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s var(--ease-out-expo), height 0.4s var(--ease-out-expo), border-color 0.3s, opacity 0.3s;
+}
+
+.cursor-dot.hover {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 107, 53, 0.15);
+  mix-blend-mode: normal;
+}
+
+.cursor-ring.hover {
+  width: 80px;
+  height: 80px;
+  border-color: var(--orange-primary);
+  opacity: 0.3;
+}
+
+@media (max-width: 768px) {
+  .cursor-dot, .cursor-ring { display: none; }
+  body { cursor: auto; }
+}
+
+/* ============================================
+   SCROLL PROGRESS BAR
+   ============================================ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--orange-primary), var(--gold-accent));
+  z-index: 10000;
+  transform-origin: left;
+  will-change: transform;
+}
+
+/* ============================================
+   PRELOADER
+   ============================================ */
+.preloader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.preloader-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--orange-primary);
+  opacity: 0;
+  letter-spacing: 0.1em;
+}
+
+.preloader-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0;
+}
+
+.preloader-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.preloader-counter {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  color: var(--text-warm);
+  opacity: 0.15;
+  position: absolute;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 9000;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo), background 0.4s;
+}
+
+.nav.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nav.scrolled {
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 107, 53, 0.08);
+  padding: 1rem 3rem;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-logo img {
+  height: 88px;
+  width: auto;
+  opacity: 0.95;
+  filter: drop-shadow(0 2px 8px rgba(255, 107, 53, 0.3));
+}
+
+.nav-logo-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.nav-logo span {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--orange-primary);
+  transition: width 0.4s var(--ease-out-expo);
+}
+
+.nav-links a:hover {
+  color: var(--text-warm);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-menu-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: none;
+  padding: 0.5rem;
+}
+
+.nav-menu-btn span {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background: var(--text-warm);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav.scrolled { padding: 0.75rem 1.5rem; }
+  .nav-links { display: none; }
+  .nav-menu-btn { display: flex; }
+}
+
+/* ============================================
+   HERO SECTION - 光的诞生叙事
+   ============================================ */
+.hero {
+  position: relative;
+  height: 300vh; /* 三倍视高用于滚动叙事 */
+  overflow: hidden;
+}
+
+.hero-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+
+/* 故事叙事层 */
+.hero-story {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero-story.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(30px);
+}
+
+.story-line {
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 400;
+  color: var(--text-warm);
+  letter-spacing: 0.1em;
+  line-height: 2;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.story-hint {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  margin-top: 3rem;
+  opacity: 0.5;
+  animation: hint-pulse 3s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+/* 最终内容层 */
+.hero-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.hero-content.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.9);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange-primary);
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--orange-primary);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(3.5rem, 12vw, 9rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.hero-title .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.hero-title .orange {
+  color: var(--orange-primary);
+  text-shadow: 0 0 80px rgba(255, 107, 53, 0.3);
+}
+
+.hero-title {
+  color: var(--orange-primary);
+  text-shadow: 0 0 80px rgba(255, 107, 53, 0.3);
+}
+
+.hero-subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.3em;
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.hero-slogan {
+  font-family: var(--font-serif);
+  font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+  color: var(--gold-accent);
+  letter-spacing: 0.15em;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.hero-scroll-hint {
+  position: fixed;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0;
+}
+
+.hero-scroll-hint span {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--orange-primary), transparent);
+  animation: scroll-line-anim 2s ease-in-out infinite;
+}
+
+@keyframes scroll-line-anim {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  50.1% { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ============================================
+   SECTION COMMON STYLES
+   ============================================ */
+.section {
+  position: relative;
+  padding: clamp(7rem, 12vw, 12rem) clamp(1.5rem, 5vw, 5rem);
+}
+
+.section-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--orange-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-label::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--orange-primary);
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 2rem;
+}
+
+.section-title .reveal-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* ============================================
+   ABOUT SECTION
+   ============================================ */
+.about {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-intro {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  line-height: 2;
+  color: var(--text-muted);
+  max-width: 700px;
+  margin-bottom: 5rem;
+}
+
+.about-intro .reveal-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.about-intro em {
+  color: var(--orange-primary);
+  font-style: normal;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.stat-card {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  border: 1px solid rgba(255, 107, 53, 0.1);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--orange-primary), transparent);
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.stat-card:hover::before {
+  opacity: 1;
+}
+
+.stat-number {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 900;
+  color: var(--orange-primary);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-number .counter {
+  display: inline;
+}
+
+.stat-unit {
+  font-size: 0.6em;
+  color: var(--gold-accent);
+  font-weight: 400;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .stat-card { padding: 1.5rem 1rem; }
+}
+
+/* ============================================
+   TIMELINE SECTION
+   ============================================ */
+.timeline-section {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.timeline-intro {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  color: var(--text-muted);
+  margin-bottom: 4rem;
+  font-style: italic;
+}
+
+.timeline-intro .reveal-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.timeline {
+  position: relative;
+  padding: 2rem 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 107, 53, 0.1);
+  transform: translateX(-50%);
+}
+
+.timeline-line-progress {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 0;
+  background: linear-gradient(to bottom, var(--orange-primary), var(--gold-accent));
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.timeline-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 4rem;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+}
+
+.timeline-item:nth-child(odd) {
+  flex-direction: row;
+  transform: translateX(-60px);
+}
+
+.timeline-item:nth-child(even) {
+  flex-direction: row-reverse;
+  transform: translateX(60px);
+}
+
+.timeline-item.in-view {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+}
+
+.timeline-item .tl-content {
+  width: calc(50% - 3rem);
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 107, 53, 0.08);
+  border-radius: 2px;
+  transition: border-color 0.4s, background 0.4s;
+}
+
+.timeline-item .tl-content:hover {
+  border-color: rgba(255, 107, 53, 0.2);
+  background: rgba(255, 107, 53, 0.03);
+}
+
+.timeline-item:nth-child(odd) .tl-content {
+  margin-right: auto;
+}
+
+.timeline-item:nth-child(even) .tl-content {
+  margin-left: auto;
+}
+
+.tl-dot {
+  position: absolute;
+  left: 50%;
+  top: 2rem;
+  width: 12px;
+  height: 12px;
+  background: var(--bg-dark);
+  border: 2px solid var(--orange-primary);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.timeline-item:hover .tl-dot {
+  background: var(--orange-primary);
+  transform: translateX(-50%) scale(1.3);
+}
+
+.tl-date {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: var(--orange-primary);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.tl-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.tl-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.tl-tag {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  color: var(--gold-accent);
+  border-radius: 2px;
+}
+
+.tl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--orange-primary);
+  text-decoration: none;
+  transition: all 0.3s;
+  cursor: none;
+}
+
+.tl-link:hover {
+  color: var(--orange-soft);
+  transform: translateX(4px);
+}
+
+.tl-link svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s;
+}
+
+.tl-link:hover svg {
+  transform: translateX(2px);
+}
+
+@media (max-width: 768px) {
+  .timeline-line, .timeline-line-progress {
+    left: 1rem;
+  }
+  .tl-dot {
+    left: 1rem;
+  }
+  .timeline-item,
+  .timeline-item:nth-child(odd),
+  .timeline-item:nth-child(even) {
+    flex-direction: row;
+    padding-left: 3rem;
+    transform: translateY(40px);
+  }
+  .timeline-item.in-view,
+  .timeline-item:nth-child(odd).in-view,
+  .timeline-item:nth-child(even).in-view {
+    transform: translateY(0);
+  }
+  .timeline-item .tl-content,
+  .timeline-item:nth-child(odd) .tl-content,
+  .timeline-item:nth-child(even) .tl-content {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+/* ============================================
+   ACHIEVEMENTS SECTION
+   ============================================ */
+.achievements {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.achievement-card {
+  position: relative;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 107, 53, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.9) translateY(20px);
+  transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo), border-color 0.4s, box-shadow 0.4s;
+  will-change: transform, opacity;
+}
+
+.achievement-card.in-view {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.achievement-card:hover {
+  border-color: rgba(255, 107, 53, 0.25);
+  transform: scale(1) translateY(-4px);
+  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.08);
+}
+
+.achievement-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle at top right, rgba(255, 107, 53, 0.08), transparent 70%);
+}
+
+.achievement-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.achievement-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.achievement-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.achievement-year {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--gold-accent);
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .achievements-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .achievement-card { padding: 2rem; }
+}
+
+/* ============================================
+   CULTURE SECTION
+   ============================================ */
+.culture {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.culture-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-top: 3rem;
+}
+
+.culture-text p {
+  font-size: 1rem;
+  line-height: 2.2;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.culture-text p strong {
+  color: var(--text-warm);
+  font-weight: 500;
+}
+
+.culture-text p em {
+  color: var(--orange-primary);
+  font-style: normal;
+}
+
+.culture-values {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.value-item {
+  padding: 1.5rem 2rem;
+  border-left: 2px solid rgba(255, 107, 53, 0.2);
+  opacity: 0;
+  transform: translateX(40px);
+  transition: border-color 0.3s;
+}
+
+.value-item:hover {
+  border-left-color: var(--orange-primary);
+}
+
+.value-item-title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-warm);
+}
+
+.value-item-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  .culture-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ============================================
+   HORIZONTAL GALLERY (Honors Images)
+   ============================================ */
+.gallery-section {
+  overflow: hidden;
+}
+
+.gallery-track {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem 0;
+  will-change: transform;
+}
+
+.gallery-item {
+  flex-shrink: 0;
+  width: 350px;
+  height: 450px;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 107, 53, 0.1);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out-expo);
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-item-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.9), transparent);
+}
+
+.gallery-item-title {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.gallery-item-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   ACTIVITIES SECTION
+   ============================================ */
+.activities-section {
+  padding: 8rem 0;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(255, 107, 53, 0.02) 50%, var(--bg-primary) 100%);
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-top: -1rem;
+  margin-bottom: 3rem;
+}
+
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.activity-card {
+  position: relative;
+  aspect-ratio: 4/3;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(40px);
+  transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s var(--ease-out-expo), opacity 0.7s var(--ease-out-expo);
+  will-change: transform, opacity;
+}
+
+.activity-card.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.activity-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.2);
+}
+
+.activity-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out-expo), filter 0.6s ease;
+}
+
+.activity-card:hover img {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+}
+
+.activity-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.9), transparent);
+  transform: translateY(100%);
+  transition: transform 0.4s ease;
+}
+
+.activity-card:hover .activity-overlay {
+  transform: translateY(0);
+}
+
+.activity-title {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.activity-desc {
+  font-size: 0.8rem;
+  color: var(--orange-primary);
+}
+
+@media (max-width: 1024px) {
+  .activities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .activities-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .activity-card {
+    aspect-ratio: 16/10;
+  }
+  
+  .activity-overlay {
+    transform: translateY(0);
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery-item {
+    width: 280px;
+    height: 360px;
+  }
+}
+
+/* ============================================
+   ENDING SECTION
+   ============================================ */
+.ending {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ending::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.06), transparent 70%);
+  pointer-events: none;
+}
+
+.ending-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: scale(0.8);
+  filter: drop-shadow(0 4px 20px rgba(255, 107, 53, 0.4));
+}
+
+.ending-quote {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+.ending-quote .reveal-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.ending-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  margin-bottom: 4rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.ending-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  border: 1px solid var(--orange-primary);
+  color: var(--orange-primary);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: background 0.4s, color 0.4s, transform 0.3s;
+  opacity: 0;
+  transform: translateY(20px);
+  cursor: none;
+}
+
+.ending-cta:hover {
+  background: var(--orange-primary);
+  color: var(--bg-dark);
+  transform: translateY(-2px);
+}
+
+.ending-cta svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s;
+}
+
+.ending-cta:hover svg {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   BILIBILI SECTION
+   ============================================ */
+.bilibili-section {
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.bilibili-title {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.bilibili-cards {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.bilibili-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 107, 53, 0.08);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s var(--ease-out-expo);
+  cursor: none;
+}
+
+.bilibili-card:hover {
+  background: rgba(255, 107, 53, 0.15);
+  border-color: var(--orange-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+}
+
+.bilibili-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--orange-primary);
+  border-radius: 10px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.bilibili-icon.video {
+  background: linear-gradient(135deg, var(--orange-primary), var(--gold-accent));
+}
+
+.bilibili-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.bilibili-info {
+  text-align: left;
+}
+
+.bilibili-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-warm);
+  margin-bottom: 0.25rem;
+}
+
+.bilibili-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 480px) {
+  .bilibili-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .bilibili-card {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+  padding: 3rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.footer-logo-row img {
+  opacity: 0.7;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+/* 南科大校名LOGO（横版，需要更大才能看清校徽） */
+.footer-logo-row img:first-child {
+  height: 140px;
+  width: auto;
+  margin-left: -20px;
+}
+
+/* 致诚书院院徽（竖版） */
+.footer-logo-row img:last-child {
+  height: 40px;
+  width: auto;
+}
+
+.footer-logo-row img:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  line-height: 2;
+}
+
+.footer-text a {
+  color: var(--orange-primary);
+  transition: opacity 0.3s;
+}
+
+.footer-text a:hover {
+  opacity: 0.7;
+}
+
+/* ============================================
+   PARALLAX DECORATIONS
+   ============================================ */
+.deco-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 107, 53, 0.08);
+  pointer-events: none;
+}
+
+.deco-circle-1 {
+  width: 400px;
+  height: 400px;
+  top: 20%;
+  right: -100px;
+}
+
+.deco-circle-2 {
+  width: 300px;
+  height: 300px;
+  bottom: 10%;
+  left: -80px;
+}
+
+.deco-line {
+  position: absolute;
+  width: 1px;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 107, 53, 0.15), transparent);
+  pointer-events: none;
+}
+
+/* ============================================
+   NOISE OVERLAY
+   ============================================ */
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ============================================
+   MOBILE MENU
+   ============================================ */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.98);
+  z-index: 8999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+
+.mobile-menu.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.mobile-menu a {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--text-warm);
+  letter-spacing: 0.1em;
+  transition: color 0.3s;
+}
+
+.mobile-menu a:hover {
+  color: var(--orange-primary);
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
+.section-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--orange-primary), var(--gold-accent));
+  margin: 0 auto;
+}
+
+/* ============================================
+   SECTION NUMBER (Pudding-style)
+   ============================================ */
+.section-number {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-number .num {
+  font-family: var(--font-serif);
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  font-weight: 400;
+  color: var(--orange-primary);
+  opacity: 0.5;
+  letter-spacing: 0.05em;
+}
+
+.section-number .num-line {
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--orange-primary);
+  opacity: 0.3;
+  vertical-align: middle;
+}
+
+/* ============================================
+   TIMELINE HOVER GLOW
+   ============================================ */
+.timeline-item .tl-content {
+  transition: border-color 0.4s, background 0.4s, box-shadow 0.4s;
+}
+
+.timeline-item .tl-content:hover {
+  border-color: rgba(255, 107, 53, 0.3);
+  background: rgba(255, 107, 53, 0.04);
+  box-shadow: 0 0 30px rgba(255, 107, 53, 0.06), inset 0 0 30px rgba(255, 107, 53, 0.02);
+}
+
+/* ============================================
+   ACHIEVEMENT 3D TILT
+   ============================================ */
+.achievement-card {
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+.achievement-card .achievement-inner {
+  transition: transform 0.15s ease-out;
+  transform-style: preserve-3d;
+}
+
+/* ============================================
+   DATA VISUALIZATION (Supervision Stats)
+   ============================================ */
+.data-viz {
+  margin: -2rem auto 2rem;
+  max-width: 600px;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 107, 53, 0.1);
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+}
+
+.data-viz.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.data-viz-title {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.data-viz-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 2.5rem;
+}
+
+.data-viz-stat {
+  text-align: center;
+}
+
+.data-viz-stat-number {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: var(--orange-primary);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.data-viz-stat-number .counter {
+  display: inline;
+}
+
+.data-viz-stat-unit {
+  font-size: 0.5em;
+  color: var(--gold-accent);
+  font-weight: 400;
+}
+
+.data-viz-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+.data-viz-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.data-viz-bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.data-viz-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.data-viz-bar-label span:last-child {
+  color: var(--orange-primary);
+  font-weight: 500;
+}
+
+.data-viz-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.data-viz-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--orange-primary), var(--gold-accent));
+  width: 0;
+  transition: width 1.2s var(--ease-out-expo);
+}
+
+.data-viz-bar-fill.animated {
+  /* width set via inline style */
+}
+
+/* ============================================
+   ORANGE HIGHLIGHT NUMBERS
+   ============================================ */
+.highlight-num {
+  color: var(--orange-primary);
+  font-weight: 700;
+  font-family: var(--font-serif);
+}
+
+/* ============================================
+   ACHIEVEMENT COUNTER
+   ============================================ */
+.achievement-counter {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--orange-primary);
+  margin-bottom: 0.25rem;
+}
+
+.achievement-counter-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .data-viz {
+    padding: 1.5rem;
+    margin: 2rem 1rem 0;
+  }
+  .data-viz-stats {
+    gap: 2rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Noise Overlay -->
+<div class="noise"></div>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress"></div>
+
+<!-- Preloader -->
+<div class="preloader">
+  <canvas class="preloader-canvas" id="preloaderCanvas"></canvas>
+  <div class="preloader-counter" id="preloaderCounter">0</div>
+  <div class="preloader-text">橙光队</div>
+  <div class="preloader-sub">SUSTech Zhicheng College</div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <div class="nav-logo">
+    <img src="assets/images/队徽_致诚橙光.png" alt="橙光队队徽" style="height:80px;width:auto;">
+    <span class="nav-logo-text">橙光队</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about" data-hover>关于</a></li>
+    <li><a href="#timeline" data-hover>时间线</a></li>
+    <li><a href="#achievements" data-hover>成就</a></li>
+    <li><a href="#activities" data-hover>活动</a></li>
+    <li><a href="#culture" data-hover>文化</a></li>
+  </ul>
+  <button class="nav-menu-btn" id="menuBtn" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" class="mobile-nav-link">关于</a>
+  <a href="#timeline" class="mobile-nav-link">时间线</a>
+  <a href="#achievements" class="mobile-nav-link">成就</a>
+  <a href="#activities" class="mobile-nav-link">活动</a>
+  <a href="#culture" class="mobile-nav-link">文化</a>
+</div>
+
+<!-- Hero Section - 光的诞生 -->
+<section class="hero" id="hero">
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  
+  <!-- 第一幕：尘埃 -->
+  <div class="hero-story" id="storyDust">
+    <p class="story-line">起初，只是几粒漂浮在黑暗中的尘埃</p>
+    <p class="story-hint">移动鼠标，点燃它们</p>
+  </div>
+  
+  <!-- 第二幕：燃烧（滚动后显示） -->
+  <div class="hero-story hidden" id="storyFire">
+    <p class="story-line">后来它们学会了燃烧</p>
+  </div>
+  
+  <!-- 第三幕：橙光队（滚动后显示） -->
+  <div class="hero-content hidden" id="heroReveal">
+    <h1 class="hero-title" id="heroTitle">
+      <span class="orange">橙光</span>队
+    </h1>
+    <p class="hero-slogan">橙光耀前路，爱满无障途</p>
+  </div>
+  
+  <div class="hero-scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section class="section about" id="about">
+  <div class="deco-circle deco-circle-1" data-speed="0.03"></div>
+  <div class="section-number"><span class="num">01</span><span class="num-line"></span></div>
+  <div class="section-label">About Us</div>
+  <h2 class="section-title" id="aboutTitle">
+    在无数个平凡的日子里<br>我们选择做那束<em style="color:var(--orange-primary);font-style:normal;">不灭的光</em>
+  </h2>
+  <p class="about-intro" id="aboutIntro">
+    南方科技大学致诚书院"橙光"志愿服务队成立于2024年3月，是一支专注于<em>助残志愿服务</em>与<em>无障碍理念推广</em>的青年力量。我们以"橙光"为名，寓意温暖、希望与方向——像一束橙色的光，照亮每一个需要关怀的角落。从校园到社区，从深圳到大湾区，橙光队始终践行"橙光耀前路，爱满无障途"的信念，用行动诠释青年担当。
+  </p>
+  <div class="about-grid">
+    <div class="stat-card" data-counter>
+      <div class="stat-number"><span class="counter" data-target="18">0</span><span class="stat-unit">人</span></div>
+      <div class="stat-label">核心团队成员</div>
+    </div>
+    <div class="stat-card" data-counter>
+      <div class="stat-number"><span class="counter" data-target="300">0</span><span class="stat-unit">+人次</span></div>
+      <div class="stat-label">累计志愿者参与</div>
+    </div>
+    <div class="stat-card" data-counter>
+      <div class="stat-number"><span class="counter" data-target="2500">0</span><span class="stat-unit">+小时</span></div>
+      <div class="stat-label">志愿服务时长</div>
+    </div>
+    <div class="stat-card" data-counter>
+      <div class="stat-number"><span class="counter" data-target="257">0</span><span class="stat-unit">处</span></div>
+      <div class="stat-label">无障碍隐患排查</div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline Section -->
+<section class="section timeline-section" id="timeline">
+  <div class="section-number"><span class="num">02</span><span class="num-line"></span></div>
+  <div class="section-label">Timeline</div>
+  <h2 class="section-title" id="timelineTitle">
+    每一步都算数<br>每一刻都发光
+  </h2>
+  <p class="timeline-intro" id="timelineIntro">从一颗种子到一片橙光，这是我们的旅程。</p>
+
+  <div class="timeline">
+    <div class="timeline-line"></div>
+    <div class="timeline-line-progress" id="timelineProgress"></div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2024.03</div>
+        <div class="tl-title">橙光队正式成立</div>
+        <div class="tl-desc">王知行等5名创始成员在致诚书院组建第一代"橙光"志愿服务队，以助残服务与无障碍推广为使命，开启追光之旅。</div>
+        <span class="tl-tag">创立</span>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2024.05</div>
+        <div class="tl-title">"有知无碍"线上支教</div>
+        <div class="tl-desc">发起残疾人运动员线上支教活动，以知识传递力量，用陪伴跨越障碍，为运动员搭建学习桥梁。</div>
+        <span class="tl-tag">支教</span>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2024.07</div>
+        <div class="tl-title">广州助残社会组织走访</div>
+        <div class="tl-desc">暑期社会实践深入广州，走访九处助残社会组织，调研残疾人服务现状，积累一线经验。</div>
+        <span class="tl-tag">社会实践</span>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2024.09</div>
+        <div class="tl-title">"蓝信封"书信笔友项目</div>
+        <div class="tl-desc">启动乡村儿童书信笔友项目，以书信为媒，连接城市与乡村，传递温暖与希望。</div>
+        <span class="tl-tag">公益</span>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2024.11</div>
+        <div class="tl-title">"轮椅上的半天"体验活动</div>
+        <div class="tl-desc">举办无障碍沉浸式体验活动，让参与者坐上轮椅感受校园环境，唤起对无障碍建设的关注。</div>
+        <span class="tl-tag">无障碍</span>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2024.12</div>
+        <div class="tl-title">公益市集与经验交流会</div>
+        <div class="tl-desc">举办公益市集，汇聚爱心力量；召开无障碍实践经验交流会，分享调研成果与服务心得。</div>
+        <span class="tl-tag">交流</span>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2025.01</div>
+        <div class="tl-title">"无碍之约，情暖校园"</div>
+        <div class="tl-desc">在涵泳图书馆举办无障碍交流会及展览活动，获中国助残志愿者协会支持，校内外嘉宾共话无障碍校园建设。</div>
+        <span class="tl-tag">校园</span>
+        <a href="https://mp.weixin.qq.com/s/HUaeedMFEUJE1gqHwXXMTg?scene=1" target="_blank" class="tl-link" data-hover>
+          查看推送 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2025.02</div>
+        <div class="tl-title">获校优秀志愿服务项目</div>
+        <div class="tl-desc">2024年度总结表彰，"有知无碍"助残志愿服务项目获评南方科技大学"优秀志愿服务项目"称号。</div>
+        <span class="tl-tag">荣誉</span>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2024.09</div>
+        <div class="tl-title">第二届橙光队成立</div>
+        <div class="tl-desc">2024年9月开学，第二代橙光队正式组建，王知行连任队长，队伍从最初的5人发展至<span class="highlight-num">12</span>人，开启常态化运营新征程。</div>
+        <span class="tl-tag">成长</span>
+        <a href="https://mp.weixin.qq.com/s/j0z1VKl5UNbU7hg3gMG78g" target="_blank" class="tl-link" data-hover>
+          查看推送 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2025.06 - 07</div>
+        <div class="tl-title">粤港澳四城无障碍调研</div>
+        <div class="tl-desc">深入深圳、广州、香港、澳门四座城市，开展无障碍环境调研实践，形成跨城对比报告。</div>
+        <span class="tl-tag">调研</span>
+        <a href="https://mp.weixin.qq.com/s/Jwf0Es8yikNzaQpoQ4dldQ" target="_blank" class="tl-link" data-hover>
+          查看推送 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2025.08</div>
+        <div class="tl-title">四城无障碍Vlog发布</div>
+        <div class="tl-desc">以影像记录四城无障碍现状，发布系列Vlog，用镜头讲述无障碍故事，引发社会关注。</div>
+        <span class="tl-tag">传播</span>
+        <a href="https://www.bilibili.com/video/BV1mFu8zTEjY" target="_blank" class="tl-link" data-hover>
+          观看视频 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </a>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2025.10</div>
+        <div class="tl-title">与深圳市盲人协会共建</div>
+        <div class="tl-desc">与深圳市盲人协会正式建立共建关系，深化助残合作，拓展服务领域。</div>
+        <span class="tl-tag">合作</span>
+        <a href="https://mp.weixin.qq.com/s/yZu1QWNt7bgY4as2EzsxyA" target="_blank" class="tl-link" data-hover>
+          查看推送 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2025.12</div>
+        <div class="tl-title">无障碍督导与公益集市</div>
+        <div class="tl-desc">开展校园无障碍督导工作，三期共勘察路段<span class="highlight-num">12.49</span>公里，发现<span class="highlight-num">265</span>处不规范点并持续推动整改；举办公益集市，传递温暖力量。</div>
+        <span class="tl-tag">督导</span>
+        <a href="https://mp.weixin.qq.com/s/4xGzhC1uV2sL_HSpLipv3A" target="_blank" class="tl-link" data-hover>
+          查看推送 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <!-- Data Visualization: Supervision Stats -->
+    <div class="data-viz" id="dataViz">
+      <div class="data-viz-title">三期无障碍督导成果</div>
+      <div class="data-viz-stats">
+        <div class="data-viz-stat">
+          <div class="data-viz-stat-number"><span class="counter" data-target="12.49" data-decimals="2">0</span><span class="data-viz-stat-unit"> km</span></div>
+          <div class="data-viz-stat-label">累计勘察路段</div>
+        </div>
+        <div class="data-viz-stat">
+          <div class="data-viz-stat-number"><span class="counter" data-target="265">0</span><span class="data-viz-stat-unit"> 处</span></div>
+          <div class="data-viz-stat-label">不规范点发现</div>
+        </div>
+      </div>
+      <div class="data-viz-bars">
+        <div class="data-viz-bar-item">
+          <div class="data-viz-bar-label"><span>第一期督导</span><span>已完成</span></div>
+          <div class="data-viz-bar-track"><div class="data-viz-bar-fill" data-width="100"></div></div>
+        </div>
+        <div class="data-viz-bar-item">
+          <div class="data-viz-bar-label"><span>第二期督导</span><span>已完成</span></div>
+          <div class="data-viz-bar-track"><div class="data-viz-bar-fill" data-width="100"></div></div>
+        </div>
+        <div class="data-viz-bar-item">
+          <div class="data-viz-bar-label"><span>第三期督导</span><span>已完成</span></div>
+          <div class="data-viz-bar-track"><div class="data-viz-bar-fill" data-width="100"></div></div>
+        </div>
+        <div class="data-viz-bar-item">
+          <div class="data-viz-bar-label"><span>第四期督导</span><span>筹备中</span></div>
+          <div class="data-viz-bar-track"><div class="data-viz-bar-fill" data-width="0"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2026.01</div>
+        <div class="tl-title">"扎根社区，互联共生"</div>
+        <div class="tl-desc">寒假社会实践走进社区，探索志愿服务与社区治理的深度融合路径。</div>
+        <span class="tl-tag">实践</span>
+        <a href="https://mp.weixin.qq.com/s/ZiB2M2tPJAxjL0YOBPcRMA" target="_blank" class="tl-link" data-hover>
+          查看推送 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2026.03</div>
+        <div class="tl-title">学雷锋日 & 换届大会</div>
+        <div class="tl-desc">开展学雷锋主题志愿服务活动；举行换届暨年度总结大会，传承橙光精神。</div>
+        <span class="tl-tag">传承</span>
+        <a href="https://mp.weixin.qq.com/s/E5xg4lPmoKqOvRQGj1WyQA" target="_blank" class="tl-link" data-hover>
+          查看推送 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="https://mp.weixin.qq.com/s/VAGjEfylu4GqX14sh3QCaQ" target="_blank" class="tl-link" data-hover style="margin-left: 1rem;">
+          换届大会 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-content">
+        <div class="tl-date">2026.05</div>
+        <div class="tl-title">第三期无障碍督导培训</div>
+        <div class="tl-desc">开展第三期无障碍督导员培训，持续提升团队专业能力，推动无障碍建设。</div>
+        <span class="tl-tag">培训</span>
+      </div>
+      <div class="tl-dot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Achievements Section -->
+<section class="section achievements" id="achievements">
+  <div class="deco-circle deco-circle-2" data-speed="0.02"></div>
+  <div class="section-number"><span class="num">03</span><span class="num-line"></span></div>
+  <div class="section-label">Achievements</div>
+  <h2 class="section-title" id="achievementsTitle">荣誉与认可</h2>
+
+  <div class="achievements-grid">
+    <div class="achievement-card" data-tilt>
+      <div class="achievement-inner">
+        <span class="achievement-icon">&#127942;</span>
+        <div class="achievement-title">2025年度校优秀志愿服务组织</div>
+        <div class="achievement-desc">凭借扎实的志愿服务成果和创新的助残模式，获评南方科技大学2025年度优秀志愿服务组织。</div>
+        <span class="achievement-year">2025</span>
+      </div>
+    </div>
+    <div class="achievement-card" data-tilt>
+      <div class="achievement-inner">
+        <span class="achievement-icon">&#127775;</span>
+        <div class="achievement-title">深圳市"百千万工程"典型案例</div>
+        <div class="achievement-desc">无障碍调研实践项目入选深圳市"百千万工程"突击队典型案例，获得市级认可。</div>
+        <span class="achievement-year">2024</span>
+      </div>
+    </div>
+    <div class="achievement-card" data-tilt>
+      <div class="achievement-inner">
+        <span class="achievement-icon">&#127941;</span>
+        <div class="achievement-title">校寒假社会实践优秀团队一等奖</div>
+        <div class="achievement-desc">"橙光聚力，有爱无碍"寒假社会实践成果丰硕，获评校级优秀团队一等奖。</div>
+        <span class="achievement-year">2025</span>
+      </div>
+    </div>
+    <div class="achievement-card" data-tilt>
+      <div class="achievement-inner">
+        <span class="achievement-icon">&#127942;</span>
+        <div class="achievement-title">校暑期社会实践优秀团队二等奖</div>
+        <div class="achievement-desc">"十五运新时代，粤港澳无限行"暑期实践深入四城调研，获评校级优秀团队二等奖。</div>
+        <span class="achievement-year">2025</span>
+      </div>
+    </div>
+    <div class="achievement-card" data-tilt>
+      <div class="achievement-inner">
+        <span class="achievement-icon">&#11088;</span>
+        <div class="achievement-title">2024年度优秀志愿服务项目</div>
+        <div class="achievement-desc">"有知无碍"残疾人运动员素养提升计划获评南方科技大学年度优秀志愿服务项目。</div>
+        <span class="achievement-year">2024</span>
+      </div>
+    </div>
+    <div class="achievement-card" data-tilt>
+      <div class="achievement-inner">
+        <span class="achievement-icon">&#8226;&#8226;&#8226;</span>
+        <div class="achievement-title">更多荣誉</div>
+        <div class="achievement-desc">还有更多奖项，等你来发现。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery Section (Honors Images) -->
+<section class="section gallery-section" id="gallery">
+  <div class="section-number"><span class="num">04</span><span class="num-line"></span></div>
+  <div class="section-label">Gallery</div>
+  <h2 class="section-title" id="galleryTitle">荣誉见证</h2>
+  <div class="gallery-track" id="galleryTrack">
+    <div class="gallery-item">
+      <img src="assets/images/荣誉_年度优秀志愿服务组织.jpg" alt="年度优秀志愿服务组织" loading="lazy">
+      <div class="gallery-item-overlay">
+        <div class="gallery-item-title">2025年度优秀志愿服务组织</div>
+        <div class="gallery-item-sub">南方科技大学</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/荣誉_百千万工程突击队典型案例.jpg" alt="百千万工程典型案例" loading="lazy">
+      <div class="gallery-item-overlay">
+        <div class="gallery-item-title">百千万工程突击队典型案例</div>
+        <div class="gallery-item-sub">深圳市</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/荣誉_社会实践优秀团队二等奖.jpg" alt="社会实践优秀团队二等奖" loading="lazy">
+      <div class="gallery-item-overlay">
+        <div class="gallery-item-title">寒假社会实践优秀团队一等奖</div>
+        <div class="gallery-item-sub">南方科技大学</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/荣誉_2024年度优秀志愿服务项目.jpg" alt="优秀志愿服务项目" loading="lazy">
+      <div class="gallery-item-overlay">
+        <div class="gallery-item-title">年度优秀志愿服务项目</div>
+        <div class="gallery-item-sub">南方科技大学</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Activities Gallery Section -->
+<section class="section activities-section" id="activities">
+  <div class="section-number"><span class="num">05</span><span class="num-line"></span></div>
+  <div class="section-label">Activities</div>
+  <h2 class="section-title" id="activitiesTitle">活动掠影</h2>
+  <p class="section-subtitle">记录橙光队的每一次成长与感动</p>
+  <div class="activities-grid">
+    <div class="activity-card" data-hover>
+      <img src="assets/push_images/寒假社会实践回顾_1.jpg" alt="寒假社会实践" loading="lazy">
+      <div class="activity-overlay">
+        <div class="activity-title">2025寒假社会实践</div>
+        <div class="activity-desc">广州无障碍环境调研</div>
+      </div>
+    </div>
+    <div class="activity-card" data-hover>
+      <img src="assets/push_images/2024年度总结报告_1.jpg" alt="年度总结" loading="lazy">
+      <div class="activity-overlay">
+        <div class="activity-title">2024年度总结</div>
+        <div class="activity-desc">回顾成长，展望未来</div>
+      </div>
+    </div>
+    <div class="activity-card" data-hover>
+      <img src="assets/push_images/寒假社会实践回顾_9.jpg" alt="橙光队合影" loading="lazy">
+      <div class="activity-overlay">
+        <div class="activity-title">橙光队团队合影</div>
+        <div class="activity-desc">追光而行的青春力量</div>
+      </div>
+    </div>
+    <div class="activity-card" data-hover>
+      <img src="assets/push_images/暑期实践回顾上_7.jpg" alt="暑期实践" loading="lazy">
+      <div class="activity-overlay">
+        <div class="activity-title">粤港澳四城调研</div>
+        <div class="activity-desc">残特奥场馆无障碍考察</div>
+      </div>
+    </div>
+    <div class="activity-card" data-hover>
+      <img src="assets/push_images/盲协共建_5.png" alt="盲协共建" loading="lazy">
+      <div class="activity-overlay">
+        <div class="activity-title">深圳市盲协共建</div>
+        <div class="activity-desc">无障碍志愿服务共建伙伴</div>
+      </div>
+    </div>
+    <div class="activity-card" data-hover>
+      <img src="assets/push_images/督导与公益集市_8.jpg" alt="督导活动" loading="lazy">
+      <div class="activity-overlay">
+        <div class="activity-title">无障碍督导</div>
+        <div class="activity-desc">用标尺丈量城市道路</div>
+      </div>
+    </div>
+    <div class="activity-card" data-hover>
+      <img src="assets/push_images/2026寒假实践_1.jpg" alt="社区实践" loading="lazy">
+      <div class="activity-overlay">
+        <div class="activity-title">扎根社区</div>
+        <div class="activity-desc">互联共生的探索</div>
+      </div>
+    </div>
+    <div class="activity-card" data-hover>
+      <img src="assets/push_images/换届大会_2.jpg" alt="换届大会" loading="lazy">
+      <div class="activity-overlay">
+        <div class="activity-title">换届大会</div>
+        <div class="activity-desc">传承橙光精神</div>
+      </div>
+    </div>
+    <div class="activity-card" data-hover>
+      <img src="assets/push_images/学雷锋日活动_1.jpg" alt="学雷锋日" loading="lazy">
+      <div class="activity-overlay">
+        <div class="activity-title">学雷锋日</div>
+        <div class="activity-desc">盲道体验科普</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Culture Section -->
+<section class="section culture" id="culture">
+  <div class="section-number"><span class="num">06</span><span class="num-line"></span></div>
+  <div class="section-label">Culture</div>
+  <h2 class="section-title" id="cultureTitle">理念与精神</h2>
+  <div class="culture-content">
+    <div class="culture-text">
+      <p>
+        <strong>橙光</strong>，是<em>温暖</em>的颜色，是<em>希望</em>的象征。我们相信，每一个人都值得被看见、被尊重、被关爱。无障碍不仅是一条坡道、一部电梯，更是一种<em>平等的理念</em>、一种<em>包容的态度</em>。
+      </p>
+      <p>
+        从线上支教到实地调研，从公益市集到无障碍督导，橙光队始终以<em>行动</em>践行信念，以<em>专业</em>提升服务，以<em>创新</em>拓展边界。我们不仅是一支志愿服务队，更是一群追光的人。
+      </p>
+      <p>
+        <strong>追光而行，以橙为名。</strong>我们愿做那束不灭的光，照亮前行的路，温暖每一个需要帮助的人。
+      </p>
+    </div>
+    <div class="culture-values">
+      <div class="value-item">
+        <div class="value-item-title">平等尊重</div>
+        <div class="value-item-desc">每一个人都拥有平等的权利与尊严，无障碍是基本人权，不是特殊照顾。</div>
+      </div>
+      <div class="value-item">
+        <div class="value-item-title">专业务实</div>
+        <div class="value-item-desc">以专业的态度对待每一次服务，用扎实的调研支撑每一份建议。</div>
+      </div>
+      <div class="value-item">
+        <div class="value-item-title">创新进取</div>
+        <div class="value-item-desc">不断探索志愿服务的新模式、新方法，让公益更有力量、更有温度。</div>
+      </div>
+      <div class="value-item">
+        <div class="value-item-title">团结协作</div>
+        <div class="value-item-desc">一个人走得快，一群人走得远。橙光的力量，来自每一位成员的付出。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Ending Section -->
+<section class="section ending" id="ending">
+  <img class="ending-logo" src="assets/images/队徽_致诚橙光.png" alt="橙光队">
+  <div class="ending-quote" id="endingQuote">
+    故事还在继续<br>光不会停
+  </div>
+  <p class="ending-sub">南方科技大学致诚书院"橙光"志愿服务队</p>
+  
+  <!-- Bilibili Video Cards -->
+  <div class="bilibili-section">
+    <p class="bilibili-title">关注我们</p>
+    <div class="bilibili-cards">
+      <a href="https://space.bilibili.com/399468332" target="_blank" class="bilibili-card" data-hover>
+        <div class="bilibili-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.396.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.497.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.397-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/></svg>
+        </div>
+        <div class="bilibili-info">
+          <div class="bilibili-name">B站主页</div>
+          <div class="bilibili-desc">南科大橙光志愿服务队</div>
+        </div>
+      </a>
+      <a href="https://www.bilibili.com/video/BV1mFu8zTEjY" target="_blank" class="bilibili-card" data-hover>
+        <div class="bilibili-icon video">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="bilibili-info">
+          <div class="bilibili-name">四城无障碍密码</div>
+          <div class="bilibili-desc">2025暑期实践Vlog</div>
+        </div>
+      </a>
+    </div>
+  </div>
+  
+  <a href="#hero" class="ending-cta" data-hover>
+    <span>回到起点</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo-row">
+    <img src="assets/images/校名_LOGO.png" alt="南方科技大学">
+    <img src="assets/images/致诚书院logo.jpg" alt="致诚书院">
+  </div>
+  <div class="footer-text">
+    南方科技大学致诚书院"橙光"志愿服务队（兼无障碍督导队）<br>
+    成立于2024年3月 &nbsp;|&nbsp; 橙光耀前路，爱满无障途
+  </div>
+</footer>
+
+<!-- ============================================
+     SCRIPTS
+     ============================================ -->
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis Smooth Scroll -->
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============================================
+  // PRELOADER
+  // ============================================
+  const preloader = document.querySelector('.preloader');
+  const preloaderCounter = document.getElementById('preloaderCounter');
+  const preloaderCanvas = document.getElementById('preloaderCanvas');
+  const preloaderCtx = preloaderCanvas.getContext('2d');
+
+  let preloaderProgress = 0;
+  const preloaderParticles = [];
+
+  function resizePreloaderCanvas() {
+    preloaderCanvas.width = window.innerWidth;
+    preloaderCanvas.height = window.innerHeight;
+  }
+  resizePreloaderCanvas();
+  window.addEventListener('resize', resizePreloaderCanvas);
+
+  // Create preloader particles
+  for (let i = 0; i < 60; i++) {
+    preloaderParticles.push({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      vx: (Math.random() - 0.5) * 4,
+      vy: (Math.random() - 0.5) * 4,
+      radius: Math.random() * 3 + 1,
+      alpha: Math.random() * 0.5 + 0.3,
+      life: 0,
+      maxLife: Math.random() * 100 + 50
+    });
+  }
+
+  function animatePreloader() {
+    preloaderCtx.clearRect(0, 0, preloaderCanvas.width, preloaderCanvas.height);
+    const cx = preloaderCanvas.width / 2;
+    const cy = preloaderCanvas.height / 2;
+
+    preloaderParticles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life++;
+      const progress = p.life / p.maxLife;
+      const alpha = p.alpha * (1 - progress);
+
+      if (p.life > p.maxLife) {
+        p.x = cx;
+        p.y = cy;
+        p.vx = (Math.random() - 0.5) * 4;
+        p.vy = (Math.random() - 0.5) * 4;
+        p.life = 0;
+      }
+
+      preloaderCtx.beginPath();
+      preloaderCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      preloaderCtx.fillStyle = `rgba(255, 107, 53, ${alpha})`;
+      preloaderCtx.fill();
+    });
+
+    // Draw expanding ring
+    const ringRadius = (preloaderProgress / 100) * Math.max(cx, cy) * 0.8;
+    preloaderCtx.beginPath();
+    preloaderCtx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
+    preloaderCtx.strokeStyle = `rgba(255, 107, 53, ${0.15 * (1 - preloaderProgress / 100)})`;
+    preloaderCtx.lineWidth = 1;
+    preloaderCtx.stroke();
+
+    if (preloaderProgress < 100) {
+      requestAnimationFrame(animatePreloader);
+    }
+  }
+  animatePreloader();
+
+  // Animate counter
+  const counterTween = { val: 0 };
+  gsap.to(counterTween, {
+    val: 100,
+    duration: 2.5,
+    ease: 'power2.inOut',
+    onUpdate: () => {
+      preloaderCounter.textContent = Math.floor(counterTween.val);
+      preloaderProgress = counterTween.val;
+    }
+  });
+
+  // Animate preloader text
+  gsap.to('.preloader-text', { opacity: 1, duration: 1, delay: 0.3 });
+  gsap.to('.preloader-sub', { opacity: 1, duration: 1, delay: 0.6 });
+
+  // Hide preloader
+  gsap.to(preloader, {
+    opacity: 0,
+    duration: 0.8,
+    delay: 3.2,
+    ease: 'power2.inOut',
+    onComplete: () => {
+      preloader.style.display = 'none';
+      initHeroAnimations();
+      initScrollAnimations();
+    }
+  });
+
+  // ============================================
+  // LENIS SMOOTH SCROLL
+  // ============================================
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    smoothWheel: true,
+  });
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // Connect Lenis to ScrollTrigger
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  // ============================================
+  // CUSTOM CURSOR
+  // ============================================
+  const cursorDot = document.querySelector('.cursor-dot');
+  const cursorRing = document.querySelector('.cursor-ring');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
+  });
+
+  function animateCursorRing() {
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
+    cursorRing.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
+    requestAnimationFrame(animateCursorRing);
+  }
+  animateCursorRing();
+
+  // Hover effects
+  document.querySelectorAll('[data-hover], a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursorDot.classList.add('hover');
+      cursorRing.classList.add('hover');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursorDot.classList.remove('hover');
+      cursorRing.classList.remove('hover');
+    });
+  });
+
+  // ============================================
+  // SCROLL PROGRESS BAR
+  // ============================================
+  gsap.to('.scroll-progress', {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: 'body',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.3
+    }
+  });
+
+  // ============================================
+  // NAVIGATION
+  // ============================================
+  const nav = document.getElementById('nav');
+  ScrollTrigger.create({
+    start: 'top -100',
+    onUpdate: (self) => {
+      if (self.direction === 1 && self.scroll() > 100) {
+        nav.classList.add('visible', 'scrolled');
+      } else if (self.scroll() <= 100) {
+        nav.classList.remove('scrolled');
+      }
+    }
+  });
+
+  // Show nav after preloader
+  setTimeout(() => {
+    nav.classList.add('visible');
+  }, 3500);
+
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  let menuOpen = false;
+
+  menuBtn.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    mobileMenu.classList.toggle('open', menuOpen);
+    const spans = menuBtn.querySelectorAll('span');
+    if (menuOpen) {
+      spans[0].style.transform = 'rotate(45deg) translate(4px, 4px)';
+      spans[1].style.opacity = '0';
+      spans[2].style.transform = 'rotate(-45deg) translate(4px, -4px)';
+    } else {
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '1';
+      spans[2].style.transform = '';
+    }
+  });
+
+  document.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      menuOpen = false;
+      mobileMenu.classList.remove('open');
+      const spans = menuBtn.querySelectorAll('span');
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '1';
+      spans[2].style.transform = '';
+    });
+  });
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        lenis.scrollTo(target, { offset: -80 });
+      }
+    });
+  });
+
+  // ============================================
+  // 光的诞生 - Canvas 粒子系统
+  // ============================================
+  const heroCanvas = document.getElementById('heroCanvas');
+  const ctx = heroCanvas.getContext('2d');
+  
+  let canvasWidth, canvasHeight;
+  function resizeCanvas() {
+    canvasWidth = window.innerWidth;
+    canvasHeight = window.innerHeight;
+    heroCanvas.width = canvasWidth;
+    heroCanvas.height = canvasHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  
+  // 粒子系统
+  const particles = [];
+  const fireParticles = []; // 火种粒子
+  const maxParticles = 150;
+  const maxFireParticles = 50;
+  
+  // 鼠标位置（粒子系统专用）
+  let particleMouseX = canvasWidth / 2;
+  let particleMouseY = canvasHeight / 2;
+  let lastParticleMouseX = particleMouseX;
+  let lastParticleMouseY = particleMouseY;
+  
+  document.addEventListener('mousemove', (e) => {
+    lastParticleMouseX = particleMouseX;
+    lastParticleMouseY = particleMouseY;
+    particleMouseX = e.clientX;
+    particleMouseY = e.clientY;
+    
+    // 鼠标移动时产生火种
+    const moveDistance = Math.hypot(particleMouseX - lastParticleMouseX, particleMouseY - lastParticleMouseY);
+    if (moveDistance > 5) {
+      createFireParticles(particleMouseX, particleMouseY, Math.min(moveDistance * 0.5, 10));
+    }
+  });
+  
+  // 基础粒子类
+  class Particle {
+    constructor(x, y, isFire = false) {
+      this.x = x || Math.random() * canvasWidth;
+      this.y = y || Math.random() * canvasHeight;
+      this.size = Math.random() * 2 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+      this.life = 1;
+      this.decay = Math.random() * 0.002 + 0.001;
+      this.isFire = isFire;
+      
+      if (isFire) {
+        // 火种粒子 - 橙色发光
+        this.size = Math.random() * 4 + 2;
+        this.speedX = (Math.random() - 0.5) * 2;
+        this.speedY = (Math.random() - 0.5) * 2 - 1; // 向上飘
+        this.decay = Math.random() * 0.02 + 0.01;
+        this.hue = Math.random() * 30 + 15; // 橙红色调
+      } else {
+        // 尘埃粒子 - 灰白色
+        this.hue = Math.random() * 40 + 30;
+        this.saturation = Math.random() * 20;
+        this.lightness = Math.random() * 30 + 60;
+      }
+    }
+    
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.life -= this.decay;
+      
+      if (this.isFire) {
+        // 火种粒子向上飘并逐渐变小
+        this.speedY -= 0.05;
+        this.size *= 0.98;
+      }
+      
+      // 边界环绕
+      if (this.x < 0) this.x = canvasWidth;
+      if (this.x > canvasWidth) this.x = 0;
+      if (this.y < 0) this.y = canvasHeight;
+      if (this.y > canvasHeight) this.y = 0;
+    }
+    
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = this.life * (this.isFire ? 0.8 : 0.3);
+      
+      if (this.isFire) {
+        // 火种发光效果
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 3);
+        gradient.addColorStop(0, `hsla(${this.hue}, 100%, 60%, 1)`);
+        gradient.addColorStop(0.4, `hsla(${this.hue}, 100%, 50%, 0.5)`);
+        gradient.addColorStop(1, `hsla(${this.hue}, 100%, 40%, 0)`);
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // 尘埃粒子
+        ctx.fillStyle = `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, ${this.life * 0.5})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      ctx.restore();
+    }
+  }
+  
+  // 创建火种粒子
+  function createFireParticles(x, y, count) {
+    for (let i = 0; i < count && fireParticles.length < maxFireParticles; i++) {
+      fireParticles.push(new Particle(
+        x + (Math.random() - 0.5) * 20,
+        y + (Math.random() - 0.5) * 20,
+        true
+      ));
+    }
+  }
+  
+  // 初始化尘埃粒子
+  for (let i = 0; i < maxParticles; i++) {
+    particles.push(new Particle());
+  }
+  
+  // 动画循环
+  function animate() {
+    ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    
+    // 更新和绘制尘埃粒子
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    
+    // 更新和绘制火种粒子
+    for (let i = fireParticles.length - 1; i >= 0; i--) {
+      const p = fireParticles[i];
+      p.update();
+      p.draw();
+      if (p.life <= 0) {
+        fireParticles.splice(i, 1);
+      }
+    }
+    
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // ============================================
+  // 滚动叙事 - 光的诞生
+  // ============================================
+  const storyDust = document.getElementById('storyDust');
+  const storyFire = document.getElementById('storyFire');
+  const heroReveal = document.getElementById('heroReveal');
+  const heroSection = document.getElementById('hero');
+  
+  // 使用 Lenis 滚动监听
+  lenis.on('scroll', ({ scroll }) => {
+    // 计算 Hero section 内的滚动进度 (0 - 1)
+    const heroHeight = heroSection.offsetHeight;
+    const heroProgress = Math.min(Math.max(scroll / heroHeight, 0), 1);
+    
+    // 第一幕 -> 第二幕 (0% - 33%)
+    if (heroProgress < 0.33) {
+      const phase1Progress = heroProgress / 0.33;
+      storyDust.style.opacity = 1 - phase1Progress;
+      storyDust.style.transform = `translateY(${-phase1Progress * 50}px)`;
+      storyFire.classList.add('hidden');
+      heroReveal.classList.add('hidden');
+    }
+    // 第二幕 (33% - 66%)
+    else if (heroProgress < 0.66) {
+      storyDust.classList.add('hidden');
+      storyFire.classList.remove('hidden');
+      heroReveal.classList.add('hidden');
+      
+      const phase2Progress = (heroProgress - 0.33) / 0.33;
+      storyFire.style.opacity = 1 - phase2Progress * 0.5;
+    }
+    // 第三幕 (66% - 100%)
+    else {
+      storyDust.classList.add('hidden');
+      storyFire.classList.add('hidden');
+      heroReveal.classList.remove('hidden');
+      
+      const phase3Progress = (heroProgress - 0.66) / 0.34;
+      heroReveal.style.opacity = Math.min(phase3Progress * 2, 1);
+      heroReveal.style.transform = `scale(${0.9 + phase3Progress * 0.1})`;
+    }
+  });
+
+  // ============================================
+  // HERO ANIMATIONS
+  // ============================================
+  function initHeroAnimations() {
+    // 第一幕淡入
+    gsap.to('#storyDust .story-line', {
+      opacity: 0.9,
+      y: 0,
+      duration: 1.5,
+      delay: 0.5,
+      ease: 'power3.out'
+    });
+    
+    gsap.to('#storyDust .story-hint', {
+      opacity: 0.5,
+      duration: 1,
+      delay: 1.5,
+      ease: 'power2.out'
+    });
+
+    // Title chars
+    const heroTitle = document.getElementById('heroTitle');
+    const titleHTML = heroTitle.innerHTML;
+    // Wrap each character in a span
+    heroTitle.innerHTML = titleHTML.replace(/(<[^>]+>)|([^\s<])/g, (match, tag, char) => {
+      if (tag) return tag;
+      return `<span class="char">${char}</span>`;
+    });
+
+    const chars = heroTitle.querySelectorAll('.char');
+    gsap.to(chars, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      stagger: 0.05,
+      delay: 0.5,
+      ease: 'power3.out'
+    });
+
+    // Slogan
+    gsap.to('.hero-slogan', {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      delay: 1.5,
+      ease: 'power3.out'
+    });
+
+    // Scroll hint
+    gsap.to('.hero-scroll-hint', {
+      opacity: 1,
+      duration: 1,
+      delay: 2,
+      ease: 'power2.out'
+    });
+  }
+
+  // ============================================
+  // SCROLL ANIMATIONS
+  // ============================================
+  function initScrollAnimations() {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // --- About Section ---
+    // Title reveal words
+    splitAndAnimate('#aboutTitle', '.reveal-word');
+
+    // Intro reveal words
+    splitAndAnimate('#aboutIntro', '.reveal-word', 0.03);
+
+    // Stat cards
+    gsap.utils.toArray('.stat-card').forEach((card, i) => {
+      gsap.to(card, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        delay: i * 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    // Counter animation
+    document.querySelectorAll('.counter').forEach(counter => {
+      const target = parseInt(counter.dataset.target);
+      const obj = { val: 0 };
+
+      ScrollTrigger.create({
+        trigger: counter,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(obj, {
+            val: target,
+            duration: 2,
+            ease: 'power2.out',
+            onUpdate: () => {
+              counter.textContent = Math.floor(obj.val).toLocaleString();
+            }
+          });
+        },
+        once: true
+      });
+    });
+
+    // --- Timeline Section ---
+    splitAndAnimate('#timelineTitle', '.reveal-word');
+    splitAndAnimate('#timelineIntro', '.reveal-word', 0.04);
+
+    // Timeline items - IntersectionObserver for left/right slide-in
+    const timelineObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          timelineObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.timeline-item').forEach(item => {
+      timelineObserver.observe(item);
+    });
+
+    // Timeline progress line
+    const timeline = document.querySelector('.timeline');
+    const timelineProgress = document.getElementById('timelineProgress');
+    if (timeline && timelineProgress) {
+      gsap.to(timelineProgress, {
+        height: '100%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: timeline,
+          start: 'top 60%',
+          end: 'bottom 40%',
+          scrub: 0.5
+        }
+      });
+    }
+
+    // --- Achievements Section ---
+    splitAndAnimate('#achievementsTitle', '.reveal-word');
+
+    // Achievement cards - IntersectionObserver for scale-in
+    const achievementObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('in-view');
+          }, index * 150);
+          achievementObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll('.achievement-card').forEach(card => {
+      achievementObserver.observe(card);
+    });
+
+    // --- Gallery Section ---
+    splitAndAnimate('#galleryTitle', '.reveal-word');
+
+    // Horizontal gallery scroll
+    const galleryTrack = document.getElementById('galleryTrack');
+    if (galleryTrack) {
+      const totalWidth = galleryTrack.scrollWidth - window.innerWidth;
+      gsap.to(galleryTrack, {
+        x: -totalWidth,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#gallery',
+          start: 'top top',
+          end: () => `+=${totalWidth}`,
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true
+        }
+      });
+    }
+
+    // --- Culture Section ---
+    splitAndAnimate('#cultureTitle', '.reveal-word');
+
+    gsap.utils.toArray('.value-item').forEach((item, i) => {
+      gsap.to(item, {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        delay: i * 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    // --- Ending Section ---
+    splitAndAnimate('#endingQuote', '.reveal-word', 0.08);
+
+    gsap.to('.ending-logo', {
+      opacity: 1,
+      scale: 1,
+      duration: 1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.ending',
+        start: 'top 60%',
+        toggleActions: 'play none none none'
+      }
+    });
+
+    gsap.to('.ending-sub', {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.3,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.ending',
+        start: 'top 50%',
+        toggleActions: 'play none none none'
+      }
+    });
+
+    gsap.to('.ending-cta', {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.6,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.ending',
+        start: 'top 40%',
+        toggleActions: 'play none none none'
+      }
+    });
+
+    // --- Parallax decorations ---
+    gsap.utils.toArray('[data-speed]').forEach(el => {
+      const speed = parseFloat(el.dataset.speed);
+      gsap.to(el, {
+        y: () => speed * 1000,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el.closest('.section') || el,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+    });
+
+    // --- Culture text paragraphs reveal ---
+    gsap.utils.toArray('.culture-text p').forEach((p, i) => {
+      gsap.from(p, {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        delay: i * 0.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: p,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    // --- Activity cards - IntersectionObserver for fade-up ---
+    const activityObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('in-view');
+          }, index * 100);
+          activityObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll('.activity-card').forEach(card => {
+      activityObserver.observe(card);
+    });
+
+    // --- Data Visualization - IntersectionObserver ---
+    const dataViz = document.getElementById('dataViz');
+    if (dataViz) {
+      const dataVizObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+
+            // Animate progress bars
+            entry.target.querySelectorAll('.data-viz-bar-fill').forEach(bar => {
+              const width = bar.dataset.width;
+              setTimeout(() => {
+                bar.style.width = width + '%';
+              }, 300);
+            });
+
+            // Animate counters in data-viz
+            entry.target.querySelectorAll('.counter').forEach(counter => {
+              const target = parseFloat(counter.dataset.target);
+              const decimals = parseInt(counter.dataset.decimals) || 0;
+              const obj = { val: 0 };
+              gsap.to(obj, {
+                val: target,
+                duration: 2,
+                ease: 'power2.out',
+                onUpdate: () => {
+                  counter.textContent = decimals > 0 ? obj.val.toFixed(decimals) : Math.floor(obj.val).toLocaleString();
+                }
+              });
+            });
+
+            dataVizObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      dataVizObserver.observe(dataViz);
+    }
+
+    // --- Achievement Counters ---
+    const achievementCounters = document.querySelectorAll('.achievement-counter');
+    const achCounterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.count);
+          const obj = { val: 0 };
+          gsap.to(obj, {
+            val: target,
+            duration: 1.5,
+            ease: 'power3.out',
+            onUpdate: () => {
+              el.textContent = Math.floor(obj.val);
+            }
+          });
+          achCounterObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    achievementCounters.forEach(c => achCounterObserver.observe(c));
+
+    // --- 3D Tilt Effect for Achievement Cards ---
+    document.querySelectorAll('[data-tilt]').forEach(card => {
+      const inner = card.querySelector('.achievement-inner');
+      if (!inner) return;
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
+        inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      });
+    });
+  }
+
+  // ============================================
+  // UTILITY: Split text into reveal words
+  // ============================================
+  function splitAndAnimate(selector, wrapperClass, staggerAmount = 0.05) {
+    const el = document.querySelector(selector);
+    if (!el) return;
+
+    const text = el.innerHTML;
+    // Split by words (Chinese characters are individual words)
+    const words = text.split(/(\s+|<[^>]+>)/);
+    let html = '';
+
+    words.forEach(word => {
+      if (word.startsWith('<')) {
+        html += word; // Keep HTML tags
+      } else if (word.trim() === '') {
+        html += word; // Keep spaces
+      } else {
+        // For Chinese text, wrap each character; for others, wrap whole word
+        if (/[\u4e00-\u9fff]/.test(word)) {
+          for (let char of word) {
+            html += `<span class="${wrapperClass.replace('.', '')}">${char}</span>`;
+          }
+        } else {
+          html += `<span class="${wrapperClass.replace('.', '')}">${word}</span>`;
+        }
+      }
+    });
+
+    el.innerHTML = html;
+
+    const wordEls = el.querySelectorAll(wrapperClass);
+    gsap.to(wordEls, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: staggerAmount,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
+  }
+
+})();
+</script>
+</body>
+</html>
