@@ -1,0 +1,14 @@
+{
+  "name": "chengguang-audit",
+  "version": "1.0.0",
+  "description": "橙光队首页全维度系统审查自动化测试",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/site-audit.test.js",
+    "audit": "node --test tests/site-audit.test.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}
