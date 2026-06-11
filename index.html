@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>橙光队 | 南方科技大学致诚书院"橙光"志愿服务队</title>
-<meta name="description" content="南方科技大学致诚书院“橙光”志愿服务队 — 橙光耀前路，爱满无障途">
+<meta name="description" content="南方科技大学致诚书院「橙光」志愿服务队——专注深圳无障碍环境督导、助残志愿服务的青年团队，用脚步丈量无障碍的边界。">
 <link rel="icon" type="image/png" href="assets/images/队徽_致诚橙光.png">
 <meta property="og:title" content="橙光队 | 南方科技大学致诚书院志愿服务队">
-<meta property="og:description" content="橙光耀前路，爱满无障途 — 南方科技大学致诚书院“橙光”志愿服务队">
-<meta property="og:image" content="assets/images/队徽_致诚橙光.png">
+<meta property="og:description" content="橙光耀前路，爱满无障途 — 南方科技大学致诚书院「橙光」志愿服务队">
+<meta property="og:image" content="https://wayhhow.github.io/CGVST/assets/images/队徽_致诚橙光.png">
+<meta property="og:url" content="https://wayhhow.github.io/CGVST/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 
@@ -31,8 +32,10 @@
   --bg-dark: #0A0A0A;
   --orange-primary: #FF6B35;
   --orange-glow: #FF8C5A;
+  --orange-soft: #FF8C5A;
   --orange-deep: #E55A25;
   --text-warm: #F5F0EB;
+  --text-primary: #F5F0EB;
   --text-muted: #8A8580;
   --gold-accent: #C9A96E;
   --gold-light: #D4BC8A;
@@ -45,6 +48,28 @@
 html {
   font-size: 16px;
   scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
+/* 无障碍：尊重用户系统的减弱动效偏好 */
+@media (prefers-reduced-motion: reduce) {
+  html.reduced-motion *,
+  html.reduced-motion *::before,
+  html.reduced-motion *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html.reduced-motion .cursor-dot,
+  html.reduced-motion .cursor-ring,
+  html.reduced-motion #constellationCanvas,
+  html.reduced-motion #heroCanvas,
+  html.reduced-motion .preloader-canvas {
+    display: none !important;
+  }
+  html.reduced-motion .preloader {
+    display: none !important;
+  }
 }
 
 html.lenis, html.lenis body {
@@ -338,6 +363,7 @@ img {
   width: 100%;
   height: 100vh;
   z-index: 1;
+  pointer-events: none;
 }
 
 /* 故事叙事层 */
@@ -384,8 +410,8 @@ img {
 }
 
 @keyframes hint-pulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.6; }
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 0.7; transform: translateY(6px); }
 }
 
 /* 最终内容层 */
@@ -1135,7 +1161,6 @@ img {
    ACTIVITIES SECTION
    ============================================ */
 .activities-section {
-  padding: 8rem 0;
   background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(255, 107, 53, 0.02) 50%, var(--bg-dark) 100%);
 }
 
@@ -1723,6 +1748,7 @@ img {
 
 .data-viz-stat-label {
   font-size: 0.75rem;
+  font-weight: 500;
   color: var(--text-muted);
   letter-spacing: 0.1em;
 }
@@ -1782,25 +1808,8 @@ img {
 }
 
 /* ============================================
-   ACHIEVEMENT COUNTER
+   MEDIA QUERIES
    ============================================ */
-.achievement-counter {
-  display: inline-block;
-  font-family: var(--font-serif);
-  font-size: 1.4rem;
-  font-weight: 900;
-  color: var(--orange-primary);
-  margin-bottom: 0.25rem;
-}
-
-.achievement-counter-label {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  letter-spacing: 0.1em;
-  display: block;
-  margin-bottom: 0.75rem;
-}
-
 @media (max-width: 768px) {
   .data-viz {
     padding: 1.5rem;
@@ -1829,6 +1838,7 @@ img {
   .achievement-card { padding: 1.25rem; }
   .tl-title { font-size: 1rem; }
   .tl-desc { font-size: 0.8rem; }
+  .tl-link-secondary { display: block; margin-left: 0 !important; margin-top: 0.5rem; }
 }
 </style>
 </head>
@@ -1846,27 +1856,27 @@ img {
 
 <!-- Preloader -->
 <div class="preloader">
-  <canvas class="preloader-canvas" id="preloaderCanvas"></canvas>
+  <canvas class="preloader-canvas" id="preloaderCanvas" aria-hidden="true"></canvas>
   <div class="preloader-counter" id="preloaderCounter">0</div>
   <div class="preloader-text">橙光队</div>
-  <div class="preloader-sub">SUSTech Zhicheng College</div>
+  <div class="preloader-sub">南方科技大学 · 致诚书院</div>
 </div>
 
 <!-- Global Background Constellation Canvas -->
-<canvas id="constellationCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+<canvas id="constellationCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;" aria-hidden="true"></canvas>
 
 <!-- Navigation -->
 <nav class="nav" id="nav">
   <div class="nav-logo">
-    <img src="assets/images/队徽_致诚橙光.png" alt="橙光队队徽" style="height:80px;width:auto;">
+    <img src="assets/images/队徽_致诚橙光.png" alt="橙光队队徽" width="80" height="80" style="height:80px;width:auto;">
     <span class="nav-logo-text">橙光队</span>
   </div>
-  <ul class="nav-links">
-    <li><a href="#about" data-hover>关于</a></li>
-    <li><a href="#timeline" data-hover>时间线</a></li>
-    <li><a href="#achievements" data-hover>成就</a></li>
-    <li><a href="#activities" data-hover>活动</a></li>
-    <li><a href="#culture" data-hover>文化</a></li>
+  <ul class="nav-links" role="menubar" aria-label="主导航">
+    <li role="none"><a href="#about" data-hover role="menuitem">关于</a></li>
+    <li role="none"><a href="#timeline" data-hover role="menuitem">时间线</a></li>
+    <li role="none"><a href="#achievements" data-hover role="menuitem">成就</a></li>
+    <li role="none"><a href="#activities" data-hover role="menuitem">活动</a></li>
+    <li role="none"><a href="#culture" data-hover role="menuitem">文化</a></li>
   </ul>
   <button class="nav-menu-btn" id="menuBtn" aria-label="菜单">
     <span></span><span></span><span></span>
@@ -1884,7 +1894,7 @@ img {
 
 <!-- Hero Section - 光的诞生 -->
 <section class="hero" id="hero">
-  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true" style="pointer-events:none;"></canvas>
   
   <!-- 第一幕：橙色光点 -->
   <div class="hero-story" id="storyDust">
@@ -1936,7 +1946,7 @@ img {
       <div class="stat-label">志愿服务时长</div>
     </div>
     <div class="stat-card" data-counter>
-      <div class="stat-number"><span class="counter" data-target="257">0</span><span class="stat-unit">处</span></div>
+      <div class="stat-number"><span class="counter" data-target="265">0</span><span class="stat-unit">处</span></div>
       <div class="stat-label">无障碍隐患排查</div>
     </div>
   </div>
@@ -2172,7 +2182,7 @@ img {
         <a href="https://mp.weixin.qq.com/s/E5xg4lPmoKqOvRQGj1WyQA" target="_blank" class="tl-link" data-hover>
           查看推送 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a href="https://mp.weixin.qq.com/s/VAGjEfylu4GqX14sh3QCaQ" target="_blank" class="tl-link" data-hover style="margin-left: 1rem;">
+        <a href="https://mp.weixin.qq.com/s/VAGjEfylu4GqX14sh3QCaQ" target="_blank" class="tl-link tl-link-secondary" data-hover>
           换届大会 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
@@ -2193,7 +2203,7 @@ img {
 
 <!-- Achievements Section -->
 <section class="section achievements" id="achievements">
-  <div class="deco-circle deco-circle-2" data-speed="0.02"></div>
+  <div class="deco-circle deco-circle-2" data-speed="0.02" aria-hidden="true"></div>
   <div class="section-number"><span class="num">03</span><span class="num-line"></span></div>
   <div class="section-label">Achievements</div>
   <h2 class="section-title" id="achievementsTitle">荣誉与认可</h2>
@@ -2241,7 +2251,7 @@ img {
     </div>
     <div class="achievement-card" data-tilt>
       <div class="achievement-inner">
-        <span class="achievement-icon">&#8226;&#8226;&#8226;</span>
+        <span class="achievement-icon">✨</span>
         <div class="achievement-title">更多荣誉</div>
         <div class="achievement-desc">还有更多奖项，等你来发现。</div>
       </div>
@@ -2256,28 +2266,28 @@ img {
   <h2 class="section-title" id="galleryTitle">荣誉见证</h2>
   <div class="gallery-track" id="galleryTrack">
     <div class="gallery-item">
-      <img src="assets/images/荣誉_年度优秀志愿服务组织.jpg" alt="年度优秀志愿服务组织" loading="lazy">
+      <img src="assets/images/荣誉_年度优秀志愿服务组织.jpg" alt="年度优秀志愿服务组织" width="600" height="850" loading="lazy">
       <div class="gallery-item-overlay">
         <div class="gallery-item-title">2025年度优秀志愿服务组织</div>
         <div class="gallery-item-sub">南方科技大学</div>
       </div>
     </div>
     <div class="gallery-item">
-      <img src="assets/images/荣誉_百千万工程突击队典型案例.jpg" alt="百千万工程典型案例" loading="lazy">
+      <img src="assets/images/荣誉_百千万工程突击队典型案例.jpg" alt="百千万工程典型案例" width="600" height="850" loading="lazy">
       <div class="gallery-item-overlay">
         <div class="gallery-item-title">百千万工程突击队典型案例</div>
         <div class="gallery-item-sub">深圳市</div>
       </div>
     </div>
     <div class="gallery-item">
-      <img src="assets/images/荣誉_社会实践优秀团队二等奖.jpg" alt="社会实践优秀团队二等奖" loading="lazy">
+      <img src="assets/images/荣誉_社会实践优秀团队二等奖.jpg" alt="社会实践优秀团队二等奖" width="600" height="850" loading="lazy">
       <div class="gallery-item-overlay">
         <div class="gallery-item-title">寒假社会实践优秀团队二等奖</div>
         <div class="gallery-item-sub">南方科技大学</div>
       </div>
     </div>
     <div class="gallery-item">
-      <img src="assets/images/荣誉_2024年度优秀志愿服务项目.jpg" alt="优秀志愿服务项目" loading="lazy">
+      <img src="assets/images/荣誉_2024年度优秀志愿服务项目.jpg" alt="优秀志愿服务项目" width="600" height="850" loading="lazy">
       <div class="gallery-item-overlay">
         <div class="gallery-item-title">年度优秀志愿服务项目</div>
         <div class="gallery-item-sub">南方科技大学</div>
@@ -2294,63 +2304,63 @@ img {
   <p class="section-subtitle">记录橙光队的每一次成长与感动</p>
   <div class="activities-grid">
     <div class="activity-card" data-hover>
-      <img src="assets/push_images/寒假社会实践回顾_1.jpg" alt="寒假社会实践" loading="lazy">
+      <img src="assets/push_images/寒假社会实践回顾_1.jpg" alt="寒假社会实践" width="800" height="450" loading="lazy">
       <div class="activity-overlay">
         <div class="activity-title">2025寒假社会实践</div>
         <div class="activity-desc">广州无障碍环境调研</div>
       </div>
     </div>
     <div class="activity-card" data-hover>
-      <img src="assets/push_images/2024年度总结报告_1.jpg" alt="年度总结" loading="lazy">
+      <img src="assets/push_images/2024年度总结报告_1.jpg" alt="年度总结" width="800" height="450" loading="lazy">
       <div class="activity-overlay">
         <div class="activity-title">2024年度总结</div>
         <div class="activity-desc">回顾成长，展望未来</div>
       </div>
     </div>
     <div class="activity-card" data-hover>
-      <img src="assets/push_images/寒假社会实践回顾_9.jpg" alt="橙光队合影" loading="lazy">
+      <img src="assets/push_images/寒假社会实践回顾_9.jpg" alt="橙光队合影" width="800" height="450" loading="lazy">
       <div class="activity-overlay">
         <div class="activity-title">橙光队团队合影</div>
         <div class="activity-desc">追光而行的青春力量</div>
       </div>
     </div>
     <div class="activity-card" data-hover>
-      <img src="assets/push_images/暑期实践回顾上_7.jpg" alt="暑期实践" loading="lazy">
+      <img src="assets/push_images/暑期实践回顾上_7.jpg" alt="暑期实践" width="800" height="450" loading="lazy">
       <div class="activity-overlay">
         <div class="activity-title">粤港澳四城调研</div>
         <div class="activity-desc">残特奥场馆无障碍考察</div>
       </div>
     </div>
     <div class="activity-card" data-hover>
-      <img src="assets/push_images/盲协共建_5.png" alt="盲协共建" loading="lazy">
+      <img src="assets/push_images/盲协共建_5.png" alt="盲协共建" width="800" height="450" loading="lazy">
       <div class="activity-overlay">
         <div class="activity-title">深圳市盲协共建</div>
         <div class="activity-desc">无障碍志愿服务共建伙伴</div>
       </div>
     </div>
     <div class="activity-card" data-hover>
-      <img src="assets/push_images/督导与公益集市_8.jpg" alt="督导活动" loading="lazy">
+      <img src="assets/push_images/督导与公益集市_8.jpg" alt="督导活动" width="800" height="450" loading="lazy">
       <div class="activity-overlay">
         <div class="activity-title">无障碍督导</div>
         <div class="activity-desc">用标尺丈量城市道路</div>
       </div>
     </div>
     <div class="activity-card" data-hover>
-      <img src="assets/push_images/2026寒假实践_1.jpg" alt="社区实践" loading="lazy">
+      <img src="assets/push_images/2026寒假实践_1.jpg" alt="社区实践" width="800" height="450" loading="lazy">
       <div class="activity-overlay">
         <div class="activity-title">扎根社区</div>
         <div class="activity-desc">互联共生的探索</div>
       </div>
     </div>
     <div class="activity-card" data-hover>
-      <img src="assets/push_images/换届大会_2.jpg" alt="换届大会" loading="lazy">
+      <img src="assets/push_images/换届大会_2.jpg" alt="换届大会" width="800" height="450" loading="lazy">
       <div class="activity-overlay">
         <div class="activity-title">换届大会</div>
         <div class="activity-desc">传承橙光精神</div>
       </div>
     </div>
     <div class="activity-card" data-hover>
-      <img src="assets/push_images/学雷锋日活动_1.jpg" alt="学雷锋日" loading="lazy">
+      <img src="assets/push_images/学雷锋日活动_1.jpg" alt="学雷锋日" width="800" height="450" loading="lazy">
       <div class="activity-overlay">
         <div class="activity-title">学雷锋日</div>
         <div class="activity-desc">盲道体验科普</div>
@@ -2401,7 +2411,7 @@ img {
 
 <!-- Ending Section -->
 <section class="section ending" id="ending">
-  <img class="ending-logo" src="assets/images/队徽_致诚橙光.png" alt="橙光队">
+  <img class="ending-logo" src="assets/images/队徽_致诚橙光.png" alt="橙光队" width="80" height="80">
   <div class="ending-quote" id="endingQuote">
     故事还在继续<br>光不会停
   </div>
@@ -2441,8 +2451,8 @@ img {
 <!-- Footer -->
 <footer class="footer">
   <div class="footer-logo-row">
-    <img src="assets/images/校名_LOGO.png" alt="南方科技大学">
-    <img src="assets/images/致诚书院logo.jpg" alt="致诚书院">
+    <img src="assets/images/校名_LOGO.png" alt="南方科技大学" width="280" height="140" loading="lazy">
+    <img src="assets/images/致诚书院logo.jpg" alt="致诚书院" width="40" height="40" loading="lazy">
   </div>
   <div class="footer-text">
     南方科技大学致诚书院"橙光"志愿服务队（兼无障碍督导队）<br>
@@ -2454,15 +2464,21 @@ img {
      SCRIPTS
      ============================================ -->
 <!-- GSAP + ScrollTrigger -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- Lenis Smooth Scroll -->
-<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
 (function() {
   'use strict';
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  // 无障碍：尊重用户系统的减弱动效偏好
+  const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    document.documentElement.classList.add('reduced-motion');
+  }
 
   // ============================================
   // PRELOADER
@@ -2552,18 +2568,30 @@ img {
   gsap.to('.preloader-text', { opacity: 1, duration: 1, delay: 0.3 });
   gsap.to('.preloader-sub', { opacity: 1, duration: 1, delay: 0.6 });
 
-  // Hide preloader
-  gsap.to(preloader, {
-    opacity: 0,
-    duration: 0.8,
-    delay: 3.2,
-    ease: 'power2.inOut',
-    onComplete: () => {
-      preloader.style.display = 'none';
-      initHeroAnimations();
-      initScrollAnimations();
-    }
-  });
+  // Hide preloader - 等待 window.load 资源就绪后再隐藏，最小 1.2s 防止闪烁
+  const preloaderStart = Date.now();
+  const PRELOADER_MIN = prefersReducedMotion ? 0 : 1200;
+  function hidePreloader() {
+    const elapsed = Date.now() - preloaderStart;
+    const wait = Math.max(0, PRELOADER_MIN - elapsed);
+    setTimeout(() => {
+      gsap.to(preloader, {
+        opacity: 0,
+        duration: prefersReducedMotion ? 0 : 0.8,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          preloader.style.display = 'none';
+          initHeroAnimations();
+          initScrollAnimations();
+        }
+      });
+    }, wait);
+  }
+  if (document.readyState === 'complete') {
+    hidePreloader();
+  } else {
+    window.addEventListener('load', hidePreloader, { once: true });
+  }
 
   // ============================================
   // LENIS SMOOTH SCROLL
@@ -2583,7 +2611,6 @@ img {
 
   // Connect Lenis to ScrollTrigger
   lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 
   // ============================================
@@ -2742,7 +2769,12 @@ img {
     heroCanvas.height = canvasHeight;
   }
   resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
+  window.__resizeHandlers = window.__resizeHandlers || [];
+  window.__resizeHandlers.push(resizeCanvas);
+  if (!window.__resizeBound) {
+    window.addEventListener('resize', () => (window.__resizeHandlers || []).forEach(fn => fn()));
+    window.__resizeBound = true;
+  }
   
   // 粒子系统
   const particles = [];
@@ -3058,7 +3090,7 @@ img {
       storyDust.classList.add('hidden');
       storyFire.classList.add('hidden');
       heroReveal.classList.remove('hidden');
-      heroReveal.style.opacity = '1';
+      heroReveal.style.setProperty('opacity', '1', 'important');
       heroReveal.style.transform = 'scale(1)';
     } else {
       // 第一幕 -> 第二幕 (0% - 33%)
@@ -3167,14 +3199,16 @@ img {
       });
     }
 
-    // Title chars
+    // Title chars (幂等守卫：避免重复调用时二次包裹破坏 DOM)
     const heroTitle = document.getElementById('heroTitle');
-    const titleHTML = heroTitle.innerHTML;
-    // Wrap each character in a span
-    heroTitle.innerHTML = titleHTML.replace(/(<[^>]+>)|([^\s<])/g, (match, tag, char) => {
-      if (tag) return tag;
-      return `<span class="char">${char}</span>`;
-    });
+    if (heroTitle && !heroTitle.querySelector('.char')) {
+      const titleHTML = heroTitle.innerHTML;
+      // Wrap each character in a span
+      heroTitle.innerHTML = titleHTML.replace(/(<[^>]+>)|([^\s<])/g, (match, tag, char) => {
+        if (tag) return tag;
+        return `<span class="char">${char}</span>`;
+      });
+    }
     const chars = heroTitle.querySelectorAll('.char');
     gsap.to(chars, {
       opacity: 1,
@@ -3602,7 +3636,12 @@ img {
       canvas.height = height;
     }
     resize();
-    window.addEventListener('resize', resize);
+    window.__resizeHandlers = window.__resizeHandlers || [];
+    window.__resizeHandlers.push(resize);
+    if (!window.__resizeBound) {
+      window.addEventListener('resize', () => (window.__resizeHandlers || []).forEach(fn => fn()));
+      window.__resizeBound = true;
+    }
     
     // Particle class for constellation
     class ConstellationParticle {
@@ -3769,7 +3808,12 @@ img {
       canvas.height = height;
     }
     resize();
-    window.addEventListener('resize', resize);
+    window.__resizeHandlers = window.__resizeHandlers || [];
+    window.__resizeHandlers.push(resize);
+    if (!window.__resizeBound) {
+      window.addEventListener('resize', () => (window.__resizeHandlers || []).forEach(fn => fn()));
+      window.__resizeBound = true;
+    }
     
     // Trail particle class
     class TrailParticle {

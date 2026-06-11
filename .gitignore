@@ -3,3 +3,11 @@ dist/
 build/
 *.log
 .DS_Store
+
+# Playwright
+playwright-report/
+test-results/
+
+# Verification artifacts (reproducible via `npm test`)
+verification/screenshots/
+verification/screenshots-*/
