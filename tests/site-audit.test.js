@@ -236,6 +236,77 @@ test('E. 资源文件', async (t) => {
 });
 
 // ============================================================
+// G. Phase 1-3 修复回归测试
+// ============================================================
+test('G. Phase 1-3 修复回归', async (t) => {
+  await t.test('G1: magnetic 选择器不含裸 a/button', () => {
+    // 查找 magneticElements 的 querySelectorAll 调用
+    const match = html.match(/const\s+magneticElements\s*=\s*document\.querySelectorAll\(\s*['"]([^'"]+)['"]\s*\)/);
+    assert.ok(match, '未找到 magneticElements 定义');
+    const selector = match[1];
+    // 不应包含裸 ', a,' 或 ', button,' 或 'a,' 开头
+    const hasBareA = /(^|,\s*)a(,|$)/.test(selector);
+    const hasBareButton = /(^|,\s*)button(,|$)/.test(selector);
+    assert.ok(!hasBareA, `magnetic 选择器仍含裸 a: ${selector}`);
+    assert.ok(!hasBareButton, `magnetic 选择器仍含裸 button: ${selector}`);
+  });
+
+  await t.test('G2: counter 循环跳过 data-viz', () => {
+    // 查找 counter 循环中的 guard clause
+    const hasGuard = /document\.querySelectorAll\(['"]\.counter['"]\)[\s\S]{0,200}closest\(['"]\.data-viz['"]\)/.test(html);
+    assert.ok(hasGuard, 'counter 循环缺少 data-viz guard clause');
+  });
+
+  await t.test('G3: preloader resize 已合并到 dispatcher', () => {
+    // 不应存在裸 window.addEventListener('resize', resizePreloaderCanvas)
+    const hasBareResize = /window\.addEventListener\(\s*['"]resize['"]\s*,\s*resizePreloaderCanvas\s*\)/.test(html);
+    assert.ok(!hasBareResize, 'preloader 仍有独立 resize 监听，未合并到 dispatcher');
+    // 应存在 __resizeHandlers.push(resizePreloaderCanvas)
+    const hasDispatcher = /__resizeHandlers\.push\(resizePreloaderCanvas\)/.test(html);
+    assert.ok(hasDispatcher, 'preloader resize 未注册到 dispatcher');
+  });
+
+  await t.test('G4: preloader 清理 - cancelAnimationFrame', () => {
+    // onComplete 中应包含 cancelAnimationFrame(preloaderRAFId)
+    const hasCancel = /cancelAnimationFrame\(preloaderRAFId\)/.test(html);
+    assert.ok(hasCancel, 'preloader onComplete 未取消 RAF');
+    // 应有 preloaderRAFId 变量
+    const hasVar = /let\s+preloaderRAFId/.test(html);
+    assert.ok(hasVar, '未定义 preloaderRAFId 变量');
+  });
+
+  await t.test('G5: Hero canvas 视口暂停', () => {
+    const hasFlags = /let\s+heroRAFId/.test(html) && /let\s+heroAnimating/.test(html);
+    assert.ok(hasFlags, '缺少 heroRAFId/heroAnimating 标志');
+    const hasCancel = /cancelAnimationFrame\(heroRAFId\)/.test(html);
+    assert.ok(hasCancel, '未在滚出视口时取消 Hero RAF');
+  });
+
+  await t.test('G6: nav 可见性由 preloader onComplete 控制', () => {
+    // 不应存在 setTimeout(..., 3500) 用于 nav
+    const hasOldTimeout = /setTimeout\([^)]*,\s*3500\)/.test(html);
+    assert.ok(!hasOldTimeout, '仍存在 setTimeout 3500 硬编码');
+    // nav.classList.add('visible') 应存在（在 initScrollAnimations 中，由 preloader onComplete 调用）
+    const hasNavVisible = /nav\.classList\.add\(['"]visible['"]\)/.test(html);
+    assert.ok(hasNavVisible, '未找到 nav.classList.add(visible)');
+  });
+
+  await t.test('G7: achievement-card CSS hover 无 translateY 冲突', () => {
+    // .achievement-card:hover 规则中不应有 transform: translateY
+    const hoverBlock = html.match(/\.achievement-card:hover\s*\{[^}]*\}/);
+    if (hoverBlock) {
+      const hasTranslateY = /translateY/.test(hoverBlock[0]);
+      assert.ok(!hasTranslateY, `.achievement-card:hover 仍含 translateY，会与 JS 3D Tilt 冲突: ${hoverBlock[0]}`);
+    }
+  });
+
+  await t.test('G8: 无重复 .tl-content:hover 规则', () => {
+    const matches = [...html.matchAll(/\.tl-content:hover\s*\{/g)];
+    assert.ok(matches.length <= 1, `存在 ${matches.length} 个 .tl-content:hover 规则（应 ≤1）`);
+  });
+});
+
+// ============================================================
 // 总结
 // ============================================================
 test('F. 总结报告', async (t) => {
@@ -257,6 +328,9 @@ test('F. 总结报告', async (t) => {
       '',
       '## 性能与无障碍',
       ...results.filter(r => r.name.startsWith('D')).map(r => `- ${r.ok ? '✅' : '❌'} ${r.name}: ${r.detail}`),
+      '',
+      '## Phase 1-3 修复回归',
+      ...results.filter(r => r.name.startsWith('G')).map(r => `- ${r.ok ? '✅' : '❌'} ${r.name}: ${r.detail}`),
       '',
       `## 统计: ${pass} 通过 / ${fail} 失败`,
     ].join('\n');

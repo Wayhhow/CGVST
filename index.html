@@ -30,6 +30,12 @@
 
 :root {
   --bg-dark: #0A0A0A;
+  --bg-base: #0D0A08;
+  --bg-elevated: #15110D;
+  --bg-hover: #1F1812;
+  --bg-glass: rgba(255, 107, 53, 0.03);
+  --border-subtle: rgba(255, 140, 90, 0.08);
+  --border-glow: rgba(255, 107, 53, 0.15);
   --orange-primary: #FF6B35;
   --orange-glow: #FF8C5A;
   --orange-soft: #FF8C5A;
@@ -86,7 +92,10 @@ html.lenis, html.lenis body {
 
 body {
   font-family: var(--font-sans);
-  background: var(--bg-dark);
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 107, 53, 0.06) 0%, transparent 60%),
+    var(--bg-base);
+  background-attachment: fixed;
   color: var(--text-warm);
   overflow-x: hidden;
   cursor: none;
@@ -262,7 +271,7 @@ img {
 }
 
 .nav-logo img {
-  height: 88px;
+  height: 80px;
   width: auto;
   opacity: 0.95;
   filter: drop-shadow(0 2px 8px rgba(255, 107, 53, 0.3));
@@ -819,11 +828,6 @@ img {
   transition: border-color 0.4s, background 0.4s;
 }
 
-.timeline-item .tl-content:hover {
-  border-color: rgba(255, 107, 53, 0.2);
-  background: rgba(255, 107, 53, 0.03);
-}
-
 .timeline-item:nth-child(odd) .tl-content {
   margin-right: auto;
 }
@@ -976,7 +980,6 @@ img {
 
 .achievement-card:hover {
   border-color: rgba(255, 107, 53, 0.25);
-  transform: scale(1) translateY(-4px);
   box-shadow: 0 8px 30px rgba(255, 107, 53, 0.08);
 }
 
@@ -1582,7 +1585,8 @@ img {
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.015;
+  mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
@@ -1840,6 +1844,177 @@ img {
   .tl-desc { font-size: 0.8rem; }
   .tl-link-secondary { display: block; margin-left: 0 !important; margin-top: 0.5rem; }
 }
+/* ============================================
+   VISUAL ENHANCEMENT: 暗色层次 + 叙事交互
+   ============================================ */
+
+/* 2.2 章节过渡光效 — 橙光扫过 */
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange-primary), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.section.in-view::before {
+  transform: scaleX(1);
+  transition: transform 1.2s var(--ease-out-expo);
+}
+
+/* 2.3 时间线进度线发光端点 — 橙光前进 */
+.timeline-line-progress {
+  position: relative;
+}
+.timeline-line-progress::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: var(--orange-primary);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 
+    0 0 8px rgba(255, 107, 53, 0.8),
+    0 0 16px rgba(255, 107, 53, 0.4),
+    0 0 32px rgba(255, 107, 53, 0.2);
+}
+
+/* 2.4 无障碍主题视觉化 — 模糊→清晰 */
+.data-viz {
+  filter: blur(2px);
+  opacity: 0.6;
+  transition: filter 1.5s var(--ease-out-expo), opacity 1.5s var(--ease-out-expo), background 0.4s, border-color 0.4s;
+}
+.data-viz.in-view {
+  filter: blur(0);
+  opacity: 1;
+}
+
+/* 2.5 Ending 区域仪式感 — 橙光扩散 */
+.ending::before {
+  content: '';
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.08), transparent 70%);
+  pointer-events: none;
+  animation: ending-glow 4s ease-in-out infinite;
+}
+@keyframes ending-glow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.08); }
+}
+
+/* 2.6 卡片光泽追踪 — 鼠标高光 */
+.achievement-card,
+.activity-card,
+.stat-card {
+  position: relative;
+}
+.achievement-card::before,
+.activity-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 140, 90, 0.06), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+  z-index: 1;
+}
+.achievement-card:hover::before,
+.activity-card:hover::before {
+  opacity: 1;
+}
+
+/* 2.7 导航链接磁吸下划线 — 从鼠标位置展开 */
+.nav-links a::after {
+  left: var(--mx, 50%);
+  transform: translateX(-50%);
+}
+
+/* 2.8 按钮涟漪效果 */
+.ending-cta {
+  position: relative;
+  overflow: hidden;
+}
+.ending-cta::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  pointer-events: none;
+}
+.ending-cta:active::after {
+  width: 300px;
+  height: 300px;
+  transition: 0s;
+}
+
+/* 2.10 文字排版优化 */
+.section-title,
+.hero-title,
+.ending-quote,
+.tl-title,
+.achievement-title {
+  text-wrap: balance;
+}
+.about-intro,
+.tl-desc,
+.achievement-desc,
+.culture-text p {
+  text-wrap: pretty;
+}
+
+/* 2.10 焦点可见性（无障碍） */
+*:focus-visible {
+  outline: 2px solid var(--orange-primary);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* 2.11 章节背景渐变区分 */
+#about { background: linear-gradient(180deg, transparent, rgba(255, 107, 53, 0.008)); }
+#timeline { background: linear-gradient(180deg, rgba(255, 107, 53, 0.008), transparent); }
+#achievements { background: linear-gradient(180deg, transparent, rgba(201, 169, 110, 0.012)); }
+#gallery { background: linear-gradient(180deg, rgba(201, 169, 110, 0.012), transparent); }
+#culture { background: linear-gradient(180deg, transparent, rgba(255, 107, 53, 0.006)); }
+#ending { background: linear-gradient(180deg, rgba(255, 107, 53, 0.006), transparent); }
+
+/* 卡片背景层次提升 */
+.stat-card {
+  background: var(--bg-elevated);
+}
+.achievement-card {
+  background: var(--bg-elevated);
+}
+.timeline-item .tl-content {
+  background: var(--bg-elevated);
+}
+.data-viz {
+  background: var(--bg-elevated);
+}
+
+/* B站卡片悬浮光晕脉冲 */
+.bilibili-card:hover {
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2), 0 0 20px rgba(255, 107, 53, 0.1);
+}
+
 </style>
 </head>
 <body>
@@ -2449,7 +2624,7 @@ img {
 </section>
 
 <!-- Footer -->
-<footer class="footer">
+<footer class="footer" id="footer">
   <div class="footer-logo-row">
     <img src="assets/images/校名_LOGO.png" alt="南方科技大学" width="280" height="140" loading="lazy">
     <img src="assets/images/致诚书院logo.jpg" alt="致诚书院" width="40" height="40" loading="lazy">
@@ -2496,7 +2671,14 @@ img {
     preloaderCanvas.height = window.innerHeight;
   }
   resizePreloaderCanvas();
-  window.addEventListener('resize', resizePreloaderCanvas);
+  // 合并到统一 resize 分发器，preloader 隐藏后由 cleanup 移除
+  window.__resizeHandlers = window.__resizeHandlers || [];
+  window.__resizeHandlers.push(resizePreloaderCanvas);
+  const __preloaderResizeIdx = window.__resizeHandlers.length - 1;
+  if (!window.__resizeBound) {
+    window.addEventListener('resize', () => (window.__resizeHandlers || []).forEach(fn => typeof fn === 'function' && fn()));
+    window.__resizeBound = true;
+  }
 
   // Create preloader particles
   for (let i = 0; i < 60; i++) {
@@ -2512,6 +2694,7 @@ img {
     });
   }
 
+  let preloaderRAFId = null;
   function animatePreloader() {
     preloaderCtx.clearRect(0, 0, preloaderCanvas.width, preloaderCanvas.height);
     const cx = preloaderCanvas.width / 2;
@@ -2547,7 +2730,7 @@ img {
     preloaderCtx.stroke();
 
     if (preloaderProgress < 100) {
-      requestAnimationFrame(animatePreloader);
+      preloaderRAFId = requestAnimationFrame(animatePreloader);
     }
   }
   animatePreloader();
@@ -2581,6 +2764,16 @@ img {
         ease: 'power2.inOut',
         onComplete: () => {
           preloader.style.display = 'none';
+          // 清理 preloader 资源：停止动画循环、移除 resize 监听、释放引用
+          if (preloaderRAFId) {
+            cancelAnimationFrame(preloaderRAFId);
+            preloaderRAFId = null;
+          }
+          if (window.__resizeHandlers && window.__resizeHandlers[__preloaderResizeIdx]) {
+            window.__resizeHandlers[__preloaderResizeIdx] = null;
+          }
+          preloaderParticles.length = 0;
+          preloaderCtx.clearRect(0, 0, preloaderCanvas.width, preloaderCanvas.height);
           initHeroAnimations();
           initScrollAnimations();
         }
@@ -2641,8 +2834,8 @@ img {
   }
   animateCursorRing();
 
-  // Magnetic effect for interactive elements
-  const magneticElements = document.querySelectorAll('[data-hover], a, button, .nav-links a, .bilibili-card, .activity-card, .achievement-card, .gallery-item, .tl-link');
+  // Magnetic effect for interactive elements (narrowed: 不含裸 a/button 避免全局拦截)
+  const magneticElements = document.querySelectorAll('[data-hover], .nav-links a, .bilibili-card, .activity-card, .achievement-card, .gallery-item, .tl-link, .mobile-nav-link, .nav-menu-btn, .ending-cta');
   
   magneticElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
@@ -2709,9 +2902,7 @@ img {
   });
 
   // Show nav after preloader
-  setTimeout(() => {
-    nav.classList.add('visible');
-  }, 3500);
+  nav.classList.add('visible');
 
   // Mobile menu
   const menuBtn = document.getElementById('menuBtn');
@@ -2772,7 +2963,7 @@ img {
   window.__resizeHandlers = window.__resizeHandlers || [];
   window.__resizeHandlers.push(resizeCanvas);
   if (!window.__resizeBound) {
-    window.addEventListener('resize', () => (window.__resizeHandlers || []).forEach(fn => fn()));
+    window.addEventListener('resize', () => (window.__resizeHandlers || []).forEach(fn => typeof fn === 'function' && fn()));
     window.__resizeBound = true;
   }
   
@@ -3029,6 +3220,8 @@ img {
   
   // 动画循环 - 3D透视版本
   let heroScrollProgress = 0;
+  let heroRAFId = null;
+  let heroAnimating = true;
   
   function animate() {
     ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
@@ -3053,7 +3246,7 @@ img {
       }
     }
     
-    requestAnimationFrame(animate);
+    heroRAFId = requestAnimationFrame(animate);
   }
   animate();
 
@@ -3080,10 +3273,22 @@ img {
       const fadeOutProgress = (heroProgress - 0.95) / 0.05;
       heroSection.style.opacity = 1 - fadeOutProgress;
       heroSection.style.pointerEvents = 'none';
-      if (heroProgress >= 1) return;
+      // 滚出 Hero 后暂停粒子动画（性能优化）
+      if (heroProgress >= 1) {
+        if (heroAnimating) {
+          cancelAnimationFrame(heroRAFId);
+          heroAnimating = false;
+        }
+        return;
+      }
     } else {
       heroSection.style.opacity = '1';
       heroSection.style.pointerEvents = '';
+      // 回到 Hero 区域时恢复粒子动画
+      if (!heroAnimating) {
+        animate();
+        heroAnimating = true;
+      }
     }
     
     if (isTouchDevice) {
@@ -3271,6 +3476,7 @@ img {
 
     // Counter animation
     document.querySelectorAll('.counter').forEach(counter => {
+      if (counter.closest('.data-viz')) return;
       const target = parseInt(counter.dataset.target);
       const obj = { val: 0 };
 
@@ -3526,29 +3732,6 @@ img {
       dataVizObserver.observe(dataViz);
     }
 
-    // --- Achievement Counters ---
-    const achievementCounters = document.querySelectorAll('.achievement-counter');
-    const achCounterObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          const target = parseInt(el.dataset.count);
-          const obj = { val: 0 };
-          gsap.to(obj, {
-            val: target,
-            duration: 1.5,
-            ease: 'power3.out',
-            onUpdate: () => {
-              el.textContent = Math.floor(obj.val);
-            }
-          });
-          achCounterObserver.unobserve(el);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    achievementCounters.forEach(c => achCounterObserver.observe(c));
-
     // --- 3D Tilt Effect for Achievement Cards ---
     if (!isTouchDevice) {
       document.querySelectorAll('[data-tilt]').forEach(card => {
@@ -3563,11 +3746,41 @@ img {
           const centerY = rect.height / 2;
           const rotateX = ((y - centerY) / centerY) * -5;
           const rotateY = ((x - centerX) / centerX) * 5;
-          inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+          inner.style.transform = `translateY(-4px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
 
         card.addEventListener('mouseleave', () => {
-          inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+          inner.style.transform = 'translateY(0) rotateX(0deg) rotateY(0deg)';
+        });
+      });
+    }
+
+    // --- Section in-view observer (章节过渡光效) ---
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          sectionObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.section').forEach(s => sectionObserver.observe(s));
+
+    // --- Card shine tracking (卡片光泽追踪) ---
+    if (!isTouchDevice) {
+      document.querySelectorAll('.achievement-card, .activity-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+          card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+        });
+      });
+
+      // --- Nav link magnetic underline (导航磁吸下划线) ---
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('mousemove', (e) => {
+          const rect = link.getBoundingClientRect();
+          link.style.setProperty('--mx', `${e.clientX - rect.left}px`);
         });
       });
     }
@@ -3639,7 +3852,7 @@ img {
     window.__resizeHandlers = window.__resizeHandlers || [];
     window.__resizeHandlers.push(resize);
     if (!window.__resizeBound) {
-      window.addEventListener('resize', () => (window.__resizeHandlers || []).forEach(fn => fn()));
+      window.addEventListener('resize', () => (window.__resizeHandlers || []).forEach(fn => typeof fn === 'function' && fn()));
       window.__resizeBound = true;
     }
     
@@ -3811,7 +4024,7 @@ img {
     window.__resizeHandlers = window.__resizeHandlers || [];
     window.__resizeHandlers.push(resize);
     if (!window.__resizeBound) {
-      window.addEventListener('resize', () => (window.__resizeHandlers || []).forEach(fn => fn()));
+      window.addEventListener('resize', () => (window.__resizeHandlers || []).forEach(fn => typeof fn === 'function' && fn()));
       window.__resizeBound = true;
     }
     
