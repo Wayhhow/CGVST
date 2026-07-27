@@ -2048,6 +2048,97 @@ img {
   background: var(--bg-elevated);
 }
 
+/* ============================================
+   移动端访问建议弹窗
+   ============================================ */
+.mobile-notice {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-out-expo);
+}
+
+.mobile-notice.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-notice-card {
+  max-width: 86vw;
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-glow);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 107, 53, 0.08);
+  transform: translateY(10px);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.mobile-notice.visible .mobile-notice-card {
+  transform: translateY(0);
+}
+
+.mobile-notice-icon {
+  font-size: 2rem;
+  color: var(--orange-primary);
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.mobile-notice-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-warm);
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.mobile-notice-text {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 1.75rem;
+}
+
+.mobile-notice-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--orange-primary);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--orange-primary);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+
+.mobile-notice-btn:hover {
+  background: var(--orange-primary);
+  color: var(--bg-dark);
+}
+
+.mobile-notice-btn:active {
+  transform: scale(0.96);
+}
+
 /* B站卡片悬浮光晕脉冲 */
 .bilibili-card:hover {
   box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2), 0 0 20px rgba(255, 107, 53, 0.1);
@@ -2056,6 +2147,16 @@ img {
 </style>
 </head>
 <body>
+
+<!-- 移动端访问建议弹窗 -->
+<div class="mobile-notice" id="mobileNotice" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="mobileNoticeTitle">
+  <div class="mobile-notice-card">
+    <div class="mobile-notice-icon" aria-hidden="true">✦</div>
+    <h2 class="mobile-notice-title" id="mobileNoticeTitle">建议在电脑端访问</h2>
+    <p class="mobile-notice-text">为获得最佳光影叙事体验，建议使用电脑浏览。移动端部分动画效果可能存在差异。</p>
+    <button class="mobile-notice-btn" id="mobileNoticeBtn" type="button">继续浏览</button>
+  </div>
+</div>
 
 <!-- Noise Overlay -->
 <div class="noise"></div>
@@ -2815,9 +2916,38 @@ img {
           preloaderCtx.clearRect(0, 0, preloaderCanvas.width, preloaderCanvas.height);
           initHeroAnimations();
           initScrollAnimations();
+          showMobileNoticeIfNeeded();
         }
       });
     }, wait);
+  }
+  // 移动端访问建议弹窗（每会话一次，≤768px 触发）
+  function showMobileNoticeIfNeeded() {
+    if (window.innerWidth > 768) return;
+    if (sessionStorage.getItem('mobileNoticeShown')) return;
+
+    const notice = document.getElementById('mobileNotice');
+    const btn = document.getElementById('mobileNoticeBtn');
+    if (!notice || !btn) return;
+
+    notice.style.display = 'flex';
+    requestAnimationFrame(() => {
+      notice.classList.add('visible');
+      notice.setAttribute('aria-hidden', 'false');
+    });
+
+    // 锁滚动：body + Lenis 双保险
+    document.body.style.overflow = 'hidden';
+    if (window.lenis) lenis.stop();
+
+    btn.addEventListener('click', () => {
+      notice.classList.remove('visible');
+      notice.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (window.lenis) lenis.start();
+      sessionStorage.setItem('mobileNoticeShown', '1');
+      setTimeout(() => { notice.style.display = 'none'; }, 400);
+    }, { once: true });
   }
   if (document.readyState === 'complete') {
     hidePreloader();
