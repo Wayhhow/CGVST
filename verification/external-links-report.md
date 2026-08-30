@@ -1,10 +1,10 @@
 # 外链验证报告
 
-生成时间: 2026-08-30T09:50:36.161Z
-验证数量: 10
+生成时间: 2026-08-30T14:34:31.025Z
+验证数量: 11
 ✅ 内容抓取成功: 2
 🚫 被 CAPTCHA/反爬拦截: 0
-❌ 失败/可疑: 8
+❌ 失败/可疑: 9
 
 ## ⚠️ 重要说明
 
@@ -73,6 +73,12 @@
 - 标题: (无)
 - 状态: 不可访问
 - 错误: fetch failed
+### ❌ [wechat] https://mp.weixin.qq.com/s/E3ZMX-nE7iRYwU7gna1-5w
+- HTTP 状态: 0
+- 内容长度: 0
+- 标题: (无)
+- 状态: 不可访问
+- 错误: fetch failed
 ### ✅ [bili-space] https://space.bilibili.com/399468332
 - HTTP 状态: 200
 - 内容长度: 800
@@ -96,5 +102,6 @@
 | 6 | wechat | https://mp.weixin.qq.com/s/ZiB2M2tPJAxjL0YOBPcRMA... | 0 | ❌Fail |
 | 7 | wechat | https://mp.weixin.qq.com/s/E5xg4lPmoKqOvRQGj1WyQA... | 0 | ❌Fail |
 | 8 | wechat | https://mp.weixin.qq.com/s/VAGjEfylu4GqX14sh3QCaQ... | 0 | ❌Fail |
-| 9 | bili-space | https://space.bilibili.com/399468332... | 200 | ✅OK |
-| 10 | bili-video | https://www.bilibili.com/video/BV1mFu8zTEjY... | 412 | ✅OK |
+| 9 | wechat | https://mp.weixin.qq.com/s/E3ZMX-nE7iRYwU7gna1-5w... | 0 | ❌Fail |
+| 10 | bili-space | https://space.bilibili.com/399468332... | 200 | ✅OK |
+| 11 | bili-video | https://www.bilibili.com/video/BV1mFu8zTEjY... | 412 | ✅OK |
