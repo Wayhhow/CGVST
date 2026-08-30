@@ -1,6 +1,6 @@
 # 外链验证报告
 
-生成时间: 2026-06-11T10:02:10.159Z
+生成时间: 2026-08-30T09:50:36.161Z
 验证数量: 10
 ✅ 内容抓取成功: 2
 🚫 被 CAPTCHA/反爬拦截: 0
@@ -79,7 +79,7 @@
 - 标题: (无)
 - 状态: 可访问
 ### ✅ [bili-video] https://www.bilibili.com/video/BV1mFu8zTEjY
-- HTTP 状态: 200
+- HTTP 状态: 412
 - 内容长度: 800
 - 标题: (无)
 - 状态: 可访问
@@ -97,4 +97,4 @@
 | 7 | wechat | https://mp.weixin.qq.com/s/E5xg4lPmoKqOvRQGj1WyQA... | 0 | ❌Fail |
 | 8 | wechat | https://mp.weixin.qq.com/s/VAGjEfylu4GqX14sh3QCaQ... | 0 | ❌Fail |
 | 9 | bili-space | https://space.bilibili.com/399468332... | 200 | ✅OK |
-| 10 | bili-video | https://www.bilibili.com/video/BV1mFu8zTEjY... | 200 | ✅OK |
+| 10 | bili-video | https://www.bilibili.com/video/BV1mFu8zTEjY... | 412 | ✅OK |

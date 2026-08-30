@@ -1504,11 +1504,11 @@ img {
   transition: opacity 0.3s, transform 0.3s;
 }
 
-/* 南科大校名LOGO（横版，需要更大才能看清校徽） */
+/* 南科大校名LOGO（横版，已裁掉透明边；深色页面上需要提亮才可读） */
 .footer-logo-row img:first-child {
-  height: 140px;
+  height: 52px;
   width: auto;
-  margin-left: -20px;
+  filter: brightness(1.9) saturate(1.15);
 }
 
 /* 致诚书院院徽（竖版） */
@@ -1859,7 +1859,7 @@ img {
   .section-label::before { width: 24px; }
   .about-intro { font-size: clamp(1rem, 3.5vw, 1.15rem); margin-bottom: 2.5rem; }
   .nav-logo img { height: 48px; }
-  .footer-logo-row img:first-child { height: 80px; margin-left: -10px; }
+  .footer-logo-row img:first-child { height: 36px; }
   .footer-logo-row img:last-child { height: 28px; }
   .deco-circle { display: none; }
   .ending::before {
@@ -2787,7 +2787,10 @@ img {
 <script>
 (function() {
   'use strict';
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  // 触屏判断：只认「主输入为触摸」的设备（手机/平板）。
+  // 触屏笔记本的 maxTouchPoints 也 > 0，不能据此禁用鼠标动效（否则横向画廊等桌面交互全部失效）
+  const isTouchDevice = (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches)
+    || ('ontouchstart' in window && !(window.matchMedia && window.matchMedia('(pointer: fine)').matches));
 
   // 无障碍：尊重用户系统的减弱动效偏好
   const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3746,26 +3749,26 @@ img {
     // --- Gallery Section ---
     splitAndAnimate('#galleryTitle', '.reveal-word');
 
-    // Horizontal gallery scroll (desktop only)
-    if (!isTouchDevice) {
+    // Horizontal gallery scroll — only on desktop-width, mouse-driven devices.
+    // 断点与 CSS 的 768px 竖排断点对齐（769px 以下 CSS 已是竖排，pin 必须拆除）
+    const mmGallery = gsap.matchMedia();
+    mmGallery.add('(min-width: 769px) and (hover: hover) and (pointer: fine)', () => {
       const galleryTrack = document.getElementById('galleryTrack');
-      if (galleryTrack) {
-        const totalWidth = galleryTrack.scrollWidth - window.innerWidth;
-        gsap.to(galleryTrack, {
-          x: -totalWidth,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '#gallery',
-            start: 'top top',
-            end: () => `+=${totalWidth}`,
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true
-          }
-        });
-      }
-    }
+      if (!galleryTrack) return;
+      gsap.to(galleryTrack, {
+        x: () => -(galleryTrack.scrollWidth - window.innerWidth),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#gallery',
+          start: 'top top',
+          end: () => `+=${galleryTrack.scrollWidth - window.innerWidth}`,
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true
+        }
+      });
+    });
 
     // --- Culture Section ---
     splitAndAnimate('#cultureTitle', '.reveal-word');
